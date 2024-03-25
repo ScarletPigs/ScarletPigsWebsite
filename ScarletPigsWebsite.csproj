@@ -4,14 +4,24 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>e70e8225-8561-461c-9fa9-89ec8910969b</UserSecretsId>
+    <UserSecretsId>aspnet-ScarletPigsWebsite-4455e0d9-cc13-460e-b351-c1800708b4b6</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
-    <PackageReference Include="MudBlazor" Version="6.16.0" />
+    <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+  </ItemGroup>
+
+  
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.*" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
+    <PackageReference Include="MudBlazor" Version="6.*" />
   </ItemGroup>
 
 </Project>
