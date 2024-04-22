@@ -98,6 +98,7 @@ jobs:
 
       # This makes the watchtower hosted at designated address 
       - name: Tell Watchtower to update the image
+        if: ${{ github.event_name != 'pull_request' }}
         shell: bash
         run: |
           curl -H "Authorization: Bearer ${{ secrets.UPDATE_TOKEN }}" ${{ secrets.WATCHTOWER_URL }}/v1/update
