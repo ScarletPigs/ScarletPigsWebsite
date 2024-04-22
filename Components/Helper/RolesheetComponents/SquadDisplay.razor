@@ -1,0 +1,99 @@
+﻿@using ScarletPigsWebsite.Data.Rolesheet
+
+<div>
+    <table>
+        <tbody>
+            <tr>
+                <!-- Displays the squad name and roles -->
+                <td>
+                    <p style="color:@TextColor">
+                        <span style="font-size:3em;text-shadow:3px 3px 5px black">@Squad.Callsign.ToUpper()  </span>
+                        <span style="font-size:1.4em;text-shadow:3px 3px 5px black">@Squad.DescriptiveName</span>
+                    </p>
+
+
+                    @if (Squad.Roles != null && Squad.Roles.Count > 0)
+                    {
+                    <ul>
+                        @foreach (Role role in Squad.Roles)
+                        {
+                            <li>
+                                <p>
+                                    <img src="@role.Icon" alt="@role.Name" style="width:1em;height:1em;" />
+                                    <span>@role.Name.PadRight(20, '.')</span>
+                                    <span>@role.AssignedPlayer.PadRight(20, ' ')</span>
+                                    <img src="@role.Icon" alt="@role.Name" style="width:1em;height:1em;" />
+                                </p>
+                            </li>
+                        }
+                    </ul>
+                    }
+                </td>
+
+                <td style="width:100px;">
+
+                </td>
+
+                <!-- Displays all short range radio stuff -->
+                <td>
+                    <div style="display:flex;flex-direction:row;">
+                        <div style="flex:1;">
+                            <img src="imgs/arma/radio/sr.png" alt="Icon of short range radio" />
+                        </div>
+                        <div style="flex:1;">
+                            <p>SR Channels:</p>
+                            <ul>
+                                @foreach (string channel in Squad.SRRadioChannels)
+                                {
+                                    <li>@channel</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+
+                <!-- Displays all long range radio stuff -->
+                <td>
+                    <div style="display:flex;flex-direction:row;">
+                        <div style="flex:1;">
+                            <img src="imgs/arma/radio/lr.png" alt="Icon of long range radio" />
+                        </div>
+                        <div style="flex:1;">
+                            <p>LR Channels:</p>
+                            <ul>
+                                @foreach (string channel in Squad.LRRadioChannels)
+                                {
+                                    <li>@channel</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div>
+
+    </div>
+</div>
+
+@if (Squad.Squads != null && Squad.Squads.Count > 0)
+{
+    @foreach (Squad squad in Squad.Squads)
+    {
+        <div style="padding-left:50px;">
+            <SquadDisplay Squad="squad" TextColor="@TextColor" />
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public Squad? Squad { get; set; }
+
+    [Parameter]
+    public EventCallback<Squad?> SquadChanged { get; set; }
+
+    [Parameter]
+    public string TextColor { get; set; } = "#f8b133";
+}

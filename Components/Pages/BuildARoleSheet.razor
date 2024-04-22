@@ -1,0 +1,27 @@
+﻿@page "/build-a-role-sheet"
+@using ScarletPigsWebsite.Data.Rolesheet
+
+<PageTitle>Build-A-Role-Sheet Tool</PageTitle>
+
+
+<MudGrid>
+    <MudItem>
+        <MudPaper>
+            <MudText Typo="Typo.h3">Build-A-Role-Sheet Tool</MudText>
+
+            <MudText Typo="Typo.h6">Add squad</MudText>
+            
+        </MudPaper>
+    </MudItem>
+    <MudItem>
+        <MudPaper>
+            <RoleSheet @bind-SquadList="Squads" />
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+
+<MudText Typo="Typo.h3">
+    
+</MudText>
+
