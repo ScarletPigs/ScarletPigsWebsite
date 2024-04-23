@@ -31,43 +31,22 @@
                 </td>
 
                 <td style="width:100px;">
-
                 </td>
 
                 <!-- Displays all short range radio stuff -->
-                <td>
-                    <div style="display:flex;flex-direction:row;">
-                        <div style="flex:1;">
-                            <img src="imgs/arma/radio/sr.png" alt="Icon of short range radio" />
-                        </div>
-                        <div style="flex:1;">
-                            <p>SR Channels:</p>
-                            <ul>
-                                @foreach (string channel in Squad.SRRadioChannels)
-                                {
-                                    <li>@channel</li>
-                                }
-                            </ul>
-                        </div>
-                    </div>
+                <td style="padding-top:10px;">
+                    <RadioTable SR="true" Squad="Squad" TextColor="@TextColor" />
+                </td>
+
+                <td style="width:50px;">
                 </td>
 
                 <!-- Displays all long range radio stuff -->
-                <td>
-                    <div style="display:flex;flex-direction:row;">
-                        <div style="flex:1;">
-                            <img src="imgs/arma/radio/lr.png" alt="Icon of long range radio" />
-                        </div>
-                        <div style="flex:1;">
-                            <p>LR Channels:</p>
-                            <ul>
-                                @foreach (string channel in Squad.LRRadioChannels)
-                                {
-                                    <li>@channel</li>
-                                }
-                            </ul>
-                        </div>
-                    </div>
+                <td style="padding-top:10px;">
+                    <RadioTable LR="true" Squad="Squad" TextColor="@TextColor" />
+                </td>
+
+                <td style="width:100px;">
                 </td>
             </tr>
         </tbody>
