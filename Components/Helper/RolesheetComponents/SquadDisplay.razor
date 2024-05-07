@@ -1,15 +1,21 @@
-﻿@using ScarletPigsWebsite.Data.Rolesheet
+﻿@using ScarletPigsWebsite.Data.Models.Helpers
+@using ScarletPigsWebsite.Data.Models.RoleAssignments
+@namespace ScarletPigsWebsite.Components.Helper.RolesheetComponents
 
 <div>
+    <SVGLine X1="0" Y1="0" X2="500" Y2="500" Color="black" Thickness="2" />
     <table>
         <tbody>
             <tr>
                 <!-- Displays the squad name and roles -->
                 <td>
-                    <p style="color:@TextColor">
-                        <span style="font-size:3em;text-shadow:3px 3px 5px black">@Squad.Callsign.ToUpper()  </span>
-                        <span style="font-size:1.4em;text-shadow:3px 3px 5px black">@Squad.DescriptiveName</span>
-                    </p>
+                    <div>
+                        <img id="@(Squad.Callsign.Remove(' ').ToLower())" src="imgs/arma/squad.svg" alt="Squad" style="width:100px;height:100px;" />
+                        <p style="color:@TextColor">
+                            <span style="font-size:3em;text-shadow:3px 3px 5px black">@Squad.Callsign.ToUpper()  </span>
+                            <span style="font-size:1.4em;text-shadow:3px 3px 5px black">@Squad.DescriptiveName</span>
+                        </p>
+                    </div>
 
 
                     @if (Squad.Roles != null && Squad.Roles.Count > 0)
@@ -75,4 +81,14 @@
 
     [Parameter]
     public string TextColor { get; set; } = "#f8b133";
+
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
+
+    private async Task<object> GetElementDetails(string elementId)
+    {
+        var element = await JSRuntime.InvokeAsync<ElementDetails>("getElementDetails", elementId);
+        
+        return element;
+    }
 }

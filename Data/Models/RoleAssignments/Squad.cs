@@ -1,4 +1,4 @@
-﻿namespace ScarletPigsWebsite.Data.Rolesheet
+﻿namespace ScarletPigsWebsite.Data.Models.RoleAssignments
 {
     public class Squad
     {

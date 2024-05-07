@@ -1,4 +1,4 @@
-using ScarletPigsWebsite.Data.Rolesheet;
+using ScarletPigsWebsite.Data.Models.RoleAssignments;
 
 namespace ScarletPigsWebsite.Components.Pages
 {
