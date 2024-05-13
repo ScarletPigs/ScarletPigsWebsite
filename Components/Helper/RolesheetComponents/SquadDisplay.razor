@@ -2,16 +2,24 @@
 @using ScarletPigsWebsite.Data.Models.RoleAssignments
 @namespace ScarletPigsWebsite.Components.Helper.RolesheetComponents
 
+
+
+@if (SVGContainer == null)
+{
+    <SVGPath @ref="_SVGContainer"  />
+}
+
 <div>
-    <SVGLine X1="0" Y1="0" X2="500" Y2="500" Color="black" Thickness="2" />
     <table>
         <tbody>
             <tr>
                 <!-- Displays the squad name and roles -->
                 <td>
-                    <div>
-                        <img id="@(Squad.Callsign.Remove(' ').ToLower())" src="imgs/arma/squad.svg" alt="Squad" style="width:100px;height:100px;" />
-                        <p style="color:@TextColor">
+                    <div style="display:flex;flex-direction:row;margin:1rem;">
+                        <div style="height:inherit;align-content:center;">
+                            <img @ref="@SquadDisplayRef" src="imgs/arma/orbaticons/Nato JMS_Infantry.svg" alt="Squad" style="height:3em;margin-right:1em;position:relative;z-index:10;" />
+                        </div>
+                        <p style="color:@TextColor;height:inherit;margin:0px;">
                             <span style="font-size:3em;text-shadow:3px 3px 5px black">@Squad.Callsign.ToUpper()  </span>
                             <span style="font-size:1.4em;text-shadow:3px 3px 5px black">@Squad.DescriptiveName</span>
                         </p>
@@ -20,15 +28,14 @@
 
                     @if (Squad.Roles != null && Squad.Roles.Count > 0)
                     {
-                    <ul>
+                    <ul style="padding-left:4rem;">
                         @foreach (Role role in Squad.Roles)
                         {
                             <li>
                                 <p>
-                                    <img src="@role.Icon" alt="@role.Name" style="width:1em;height:1em;" />
+                                    <img src="@role.Icon" alt="@role.Name" style="width:2em;height:2em;" />
                                     <span>@role.Name.PadRight(20, '.')</span>
                                     <span>@role.AssignedPlayer.PadRight(20, ' ')</span>
-                                    <img src="@role.Icon" alt="@role.Name" style="width:1em;height:1em;" />
                                 </p>
                             </li>
                         }
@@ -57,9 +64,6 @@
             </tr>
         </tbody>
     </table>
-    <div>
-
-    </div>
 </div>
 
 @if (Squad.Squads != null && Squad.Squads.Count > 0)
@@ -67,7 +71,7 @@
     @foreach (Squad squad in Squad.Squads)
     {
         <div style="padding-left:50px;">
-            <SquadDisplay Squad="squad" TextColor="@TextColor" />
+            <SquadDisplay SVGContainer="@_SVGContainer" Squad="squad" TextColor="@TextColor" OnElementReferenceChanged="AddElementReference" />
         </div>
     }
 }
@@ -82,8 +86,54 @@
     [Parameter]
     public string TextColor { get; set; } = "#f8b133";
 
+    [Parameter]
+    public EventCallback<ElementReference> OnElementReferenceChanged { get; set; }
+
+    [Parameter]
+    public SVGPath? SVGContainer { get; set; } = null;
+
     [Inject]
     private IJSRuntime JSRuntime { get; set; }
+
+    private ElementReference SquadDisplayRef { get; set; }
+
+    private List<ElementReference> SquadDisplayRefs { get; set; } = new List<ElementReference>();
+    private List<(ElementReference StartRef, ElementReference EndRef)> Connections { get; set; } = new List<(ElementReference, ElementReference)>();
+
+    private SVGPath? _SVGContainer { get; set; } = null;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await OnElementReferenceChanged.InvokeAsync(SquadDisplayRef);
+    }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (SVGContainer != null)
+            _SVGContainer = SVGContainer;
+
+        
+    }
+
+    override protected async Task OnAfterRenderAsync(bool firstRender)
+    {
+        foreach (ElementReference elementReference in SquadDisplayRefs)
+        {
+            // Connections.Add((SquadDisplayRef, elementReference));
+            if (_SVGContainer != null)
+                _SVGContainer.Connections.Add((SquadDisplayRef, elementReference));
+            else
+                SVGContainer?.Connections.Add((SquadDisplayRef, elementReference));
+        }
+    }
+
+    private async Task AddElementReference(ElementReference elementReference)
+    {
+        SquadDisplayRefs.Add(elementReference);
+    }
 
     private async Task<object> GetElementDetails(string elementId)
     {

@@ -24,6 +24,7 @@ namespace ScarletPigsWebsite.Components.Pages
                     new Role
                     {
                         Name = "Rifleman",
+                        Icon = "imgs/arma/orbaticons/Nato JMS_Infantry.svg",
                         Description = "The standard infantryman, armed with",
                         AssignedPlayer = "Player1",
                     }
@@ -42,18 +43,21 @@ namespace ScarletPigsWebsite.Components.Pages
                             new Role
                             {
                                 Name = "Rifleman",
+                                Icon = "imgs/arma/orbaticons/Nato JMS_Infantry.svg",
                                 Description = "The standard infantryman, armed with",
                                 AssignedPlayer = "Player2",
                             },
                             new Role
                             {
                                 Name = "Rifleman",
+                                Icon = "imgs/arma/orbaticons/Nato JMS_Infantry.svg",
                                 Description = "The standard infantryman, armed with",
                                 AssignedPlayer = "Player3",
                             },
                             new Role
                             {
                                 Name = "Rifleman",
+                                Icon = "imgs/arma/orbaticons/Nato JMS_Infantry.svg",
                                 Description = "The standard infantryman, armed with",
                                 AssignedPlayer = "Player4",
                             }
@@ -71,6 +75,7 @@ namespace ScarletPigsWebsite.Components.Pages
                             new Role
                             {
                                 Name = "Rifleman",
+                                Icon = "imgs/arma/orbaticons/Nato JMS_Infantry.svg",
                                 Description = "The standard infantryman, armed with",
                                 AssignedPlayer = "Player5",
                             }
@@ -89,6 +94,7 @@ namespace ScarletPigsWebsite.Components.Pages
                                     new Role
                                     {
                                         Name = "Rifleman",
+                                        Icon = "imgs/arma/orbaticons/Nato JMS_Infantry.svg",
                                         Description = "The standard infantryman, armed with",
                                         AssignedPlayer = "Player6",
                                     }

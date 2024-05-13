@@ -1,7 +1,7 @@
 ﻿@using ScarletPigsWebsite.Data.Models.RoleAssignments
 @namespace ScarletPigsWebsite.Components.Helper.RolesheetComponents
 
-<div style="background-color:@BgColor;padding:15px;">
+<div style="background-color:@BgColor;padding:15px;position:relative;">
     @foreach (Squad squad in SquadList)
     {
         <SquadDisplay Squad="squad" TextColor="@TextColor" />
