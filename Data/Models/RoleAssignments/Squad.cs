@@ -1,7 +1,10 @@
-﻿namespace ScarletPigsWebsite.Data.Models.RoleAssignments
+﻿using Microsoft.AspNetCore.Components;
+
+namespace ScarletPigsWebsite.Data.Models.RoleAssignments
 {
     public class Squad
     {
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Callsign { get; set; }
         public string DescriptiveName { get; set; }
         public string Description { get; set; }

@@ -6,7 +6,7 @@
 
 @if (SVGContainer == null)
 {
-    <SVGPath @ref="_SVGContainer"  />
+    <SVGPath @ref="_SVGContainer" />
 }
 
 <div>
@@ -17,7 +17,7 @@
                 <td>
                     <div style="display:flex;flex-direction:row;margin:1rem;">
                         <div style="height:inherit;align-content:center;">
-                            <img @ref="@SquadDisplayRef" src="imgs/arma/orbaticons/Nato JMS_Infantry.svg" alt="Squad" style="height:3em;margin-right:1em;position:relative;z-index:10;" />
+                            <img id="@Squad.Id" src="imgs/arma/orbaticons/Nato JMS_Infantry.svg" alt="Squad" style="height:3em;margin-right:1em;position:relative;z-index:10;" />
                         </div>
                         <p style="color:@TextColor;height:inherit;margin:0px;">
                             <span style="font-size:3em;text-shadow:3px 3px 5px black">@Squad.Callsign.ToUpper()  </span>
@@ -28,11 +28,11 @@
 
                     @if (Squad.Roles != null && Squad.Roles.Count > 0)
                     {
-                    <ul style="padding-left:4rem;">
+                    <ul style="padding-left:7rem;">
                         @foreach (Role role in Squad.Roles)
                         {
                             <li>
-                                <p>
+                                <p style="margin:0px;">
                                     <img src="@role.Icon" alt="@role.Name" style="width:2em;height:2em;" />
                                     <span>@role.Name.PadRight(20, '.')</span>
                                     <span>@role.AssignedPlayer.PadRight(20, ' ')</span>
@@ -47,7 +47,7 @@
                 </td>
 
                 <!-- Displays all short range radio stuff -->
-                <td style="padding-top:10px;">
+                <td style="padding-top:7em;">
                     <RadioTable SR="true" Squad="Squad" TextColor="@TextColor" />
                 </td>
 
@@ -55,7 +55,7 @@
                 </td>
 
                 <!-- Displays all long range radio stuff -->
-                <td style="padding-top:10px;">
+                <td style="padding-top:7em;">
                     <RadioTable LR="true" Squad="Squad" TextColor="@TextColor" />
                 </td>
 
@@ -71,7 +71,7 @@
     @foreach (Squad squad in Squad.Squads)
     {
         <div style="padding-left:50px;">
-            <SquadDisplay SVGContainer="@_SVGContainer" Squad="squad" TextColor="@TextColor" OnElementReferenceChanged="AddElementReference" />
+            <SquadDisplay SVGContainer="@_SVGContainer" ParentSquad="@Squad" Squad="@squad" TextColor="@TextColor" />
         </div>
     }
 }
@@ -81,64 +81,55 @@
     public Squad? Squad { get; set; }
 
     [Parameter]
+    public Squad? ParentSquad { get; set; }
+
+    [Parameter]
     public EventCallback<Squad?> SquadChanged { get; set; }
 
     [Parameter]
     public string TextColor { get; set; } = "#f8b133";
 
-    [Parameter]
-    public EventCallback<ElementReference> OnElementReferenceChanged { get; set; }
 
     [Parameter]
     public SVGPath? SVGContainer { get; set; } = null;
 
+    [Parameter]
+    public ElementReference ParentSquadDisplayRef { get; set; }
+    [Parameter]
+    public EventCallback<ElementReference> ParentSquadDisplayRefChanged { get; set; }
+
+    public ElementReference SquadDisplayRef { get; set; }
+
     [Inject]
     private IJSRuntime JSRuntime { get; set; }
 
-    private ElementReference SquadDisplayRef { get; set; }
 
-    private List<ElementReference> SquadDisplayRefs { get; set; } = new List<ElementReference>();
-    private List<(ElementReference StartRef, ElementReference EndRef)> Connections { get; set; } = new List<(ElementReference, ElementReference)>();
 
     private SVGPath? _SVGContainer { get; set; } = null;
 
+    private bool IsParent { get; set; } = false;
 
-    protected override async Task OnInitializedAsync()
+
+    protected override Task OnInitializedAsync()
     {
 
-        await OnElementReferenceChanged.InvokeAsync(SquadDisplayRef);
+        return base.OnInitializedAsync();
     }
 
 
     protected override async Task OnParametersSetAsync()
     {
         if (SVGContainer != null)
-            _SVGContainer = SVGContainer;
-
-        
-    }
-
-    override protected async Task OnAfterRenderAsync(bool firstRender)
-    {
-        foreach (ElementReference elementReference in SquadDisplayRefs)
         {
-            // Connections.Add((SquadDisplayRef, elementReference));
-            if (_SVGContainer != null)
-                _SVGContainer.Connections.Add((SquadDisplayRef, elementReference));
-            else
-                SVGContainer?.Connections.Add((SquadDisplayRef, elementReference));
+            _SVGContainer = SVGContainer;
         }
     }
 
-    private async Task AddElementReference(ElementReference elementReference)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        SquadDisplayRefs.Add(elementReference);
-    }
-
-    private async Task<object> GetElementDetails(string elementId)
-    {
-        var element = await JSRuntime.InvokeAsync<ElementDetails>("getElementDetails", elementId);
-        
-        return element;
+        if (ParentSquad != null)
+        {
+            await _SVGContainer.AddConnection(ParentSquad.Id, Squad.Id);
+        }
     }
 }
