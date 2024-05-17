@@ -1,9 +1,20 @@
+using Microsoft.AspNetCore.Components;
+using MudBlazor;
+using MudBlazor.Utilities;
 using ScarletPigsWebsite.Data.Models.RoleAssignments;
 
 namespace ScarletPigsWebsite.Components.Pages
 {
     public partial class BuildARoleSheet
     {
+        private string OPTitle = "OP Title";
+        private string OPDescription = "OP Description";
+        private string OPAuthor = "OP Author";
+        private string OPJoinOrderComment = "OP Date";
+
+        private MudColor BgColor = new MudColor("#a7a9ac");
+        private MudColor TextColor = new MudColor("#f8b133");
+
         private List<Squad> Squads = new List<Squad>();
         private Squad EditSquad = new Squad();
         private Role EditRole = new Role();

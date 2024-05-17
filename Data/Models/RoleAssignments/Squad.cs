@@ -11,6 +11,6 @@ namespace ScarletPigsWebsite.Data.Models.RoleAssignments
         public string[] SRRadioChannels { get; set; }
         public string[] LRRadioChannels { get; set; }
         public List<Role> Roles { get; set; }
-        public List<Squad> Squads { get; set; }
+        public List<Squad> Squads { get; set; } = new List<Squad>();
     }
 }

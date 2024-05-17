@@ -45,7 +45,7 @@ function drawRightAngledLineOld(svgContainerId, startElementId, endElementId) {
 
         const newPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
         newPath.setAttribute("d", dPath);
-        newPath.setAttribute("stroke", "black");
+        newPath.setAttribute("stroke", "blue");
         newPath.setAttribute("stroke-width", "2");
         newPath.setAttribute("fill", "none");
 
@@ -72,7 +72,7 @@ function drawRightAngledLine(svgContainerId, startElementId, endElementId) {
 
         const newPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
         newPath.setAttribute("d", dPath);
-        newPath.setAttribute("stroke", "black");
+        newPath.setAttribute("stroke", "#084F95");
         newPath.setAttribute("stroke-width", "2");
         newPath.setAttribute("fill", "none");
 

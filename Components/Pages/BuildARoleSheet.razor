@@ -1,23 +1,39 @@
 ﻿@page "/build-a-role-sheet"
 @using ScarletPigsWebsite.Components.Helper.RolesheetComponents
+@using ScarletPigsWebsite.Data.Models.RoleAssignments
 @namespace ScarletPigsWebsite.Components.Pages
 
 <PageTitle>Build-A-Role-Sheet Tool</PageTitle>
 
 <!-- http://madletter.net/arma/rosters/07_stormchild@2x.png is the template to visually build off of -->
 
-<MudGrid>
+<MudGrid Justify="Justify.SpaceAround">
     <MudItem>
         <MudPaper>
             <MudText Typo="Typo.h3">Build-A-Role-Sheet Tool</MudText>
 
-            <MudText Typo="Typo.h6">Add squad</MudText>
+            <MudForm>
+                @* Need to add image upload ability *@
+                <MudTextField Label="Title" @bind-Value="@OPTitle" />
+                <MudTextField Label="Description" @bind-Value="@OPDescription" />
+                <MudTextField Label="Author" @bind-Value="@OPAuthor" />
+                <MudTextField Label="Join Order Comments" @bind-Value="@OPJoinOrderComment" />
+                <MudColorPicker Label="Background Color" @bind-Value="@BgColor" />
+                <MudColorPicker Label="Text Color" @bind-Value="@TextColor" />
+
+            </MudForm>
+                @foreach (Squad squad in Squads)
+                {
+                    <SquadBuilder Squad="squad" />
+                }
+
+                <MudButton Color="Color.Success" OnClick="@(e => Squads.Add(new Squad()))">Add Squad</MudButton>
             
         </MudPaper>
     </MudItem>
     <MudItem>
         <MudPaper>
-            <RoleSheet @bind-SquadList="Squads" />
+            <RoleSheet @bind-SquadList="Squads" Title="@OPTitle" Description="@OPDescription" Author="@OPAuthor" JoinOrderComments="@OPJoinOrderComment" BgColor="@BgColor.Value" TextColor="@TextColor.Value" />
         </MudPaper>
     </MudItem>
 </MudGrid>

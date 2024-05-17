@@ -1,0 +1,34 @@
+﻿@using ScarletPigsWebsite.Data.Models.RoleAssignments
+
+<MudExpansionPanels>
+    <MudExpansionPanel Text="@Squad.Callsign">
+        <MudForm Model="Squad">
+
+            <MudTextField Label="Callsign" @bind-Value="Squad.Callsign" />
+            <MudTextField Label="Descriptive Name" @bind-Value="Squad.DescriptiveName" />
+            <MudTextField Label="SR Channel 1" @bind-Value="Squad.SRRadioChannels[0]" />
+            <MudTextField Label="SR Channel 2" @bind-Value="Squad.SRRadioChannels[1]" />
+            <MudTextField Label="SR Channel 3" @bind-Value="Squad.SRRadioChannels[2]" />
+            <MudTextField Label="LR Channel 1" @bind-Value="Squad.LRRadioChannels[0]" />
+            <MudTextField Label="LR Channel 2" @bind-Value="Squad.LRRadioChannels[1]" />
+            <MudTextField Label="LR Channel 3" @bind-Value="Squad.LRRadioChannels[2]" />
+        </MudForm>
+
+        <MudDataGrid Items="Squad.Roles" EditMode="DataGridEditMode.Cell">
+            <Columns>
+                <PropertyColumn Property="@(x => x.Name)" Title="Role Name" />
+                <PropertyColumn Property="@(x => x.AssignedPlayer)" Title="Assigned Player" />
+            </Columns>
+        </MudDataGrid>
+
+        @foreach (Squad squad in Squad.Squads)
+        {
+            <SquadBuilder Squad="squad" />
+        }
+    </MudExpansionPanel>
+</MudExpansionPanels>
+
+@code {
+    [Parameter]
+    public Squad Squad { get; set; }
+}
