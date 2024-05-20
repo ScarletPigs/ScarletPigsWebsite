@@ -10,10 +10,10 @@
 
 @code {
     [Parameter] 
-    public ObservableCollection<(string StartId, string EndId)> Connections { get; set; } = new ObservableCollection<(string, string)>();
+    public ObservableCollection<(string StartId, string EndId, string color, int thickness)> Connections { get; set; } = new ObservableCollection<(string, string, string, int)>();
 
     [Parameter]
-    public EventCallback<ObservableCollection<(string StartId, string EndId)>> ConnectionsChanged { get; set; }
+    public EventCallback<ObservableCollection<(string StartId, string EndId, string color, int thickness)>> ConnectionsChanged { get; set; }
 
     private string id = Guid.NewGuid().ToString();
 
@@ -22,13 +22,13 @@
         Connections.CollectionChanged += (sender, e) => StateHasChanged();
     }
 
-    public async Task AddConnection(string startId, string endId)
+    public async Task AddConnection(string startId, string endId, string color = "#084F95", int thickness = 2)
     {
 
         if (string.IsNullOrEmpty(startId) || string.IsNullOrEmpty(endId))
             throw new ArgumentException("Id cannot be null");
 
-        Connections.Add((startId, endId));
+        Connections.Add((startId, endId, color, thickness));
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -38,9 +38,28 @@
 
     private async Task RenderSVGPaths()
     {
-        foreach (var connection in Connections)
+        try
         {
-            await JSRuntime.InvokeVoidAsync("drawRightAngledLine", id, connection.StartId, connection.EndId);
+            foreach (var connection in Connections)
+            {
+                // Check if the element exists
+                if (await JSRuntime.InvokeAsync<bool>("elementExists", connection.StartId) == false)
+                {
+                    Connections.Remove(connection);
+                    continue;
+                }
+                if (await JSRuntime.InvokeAsync<bool>("elementExists", connection.EndId) == false)
+                {
+                    Connections.Remove(connection);
+                    continue;
+                }
+
+                await JSRuntime.InvokeVoidAsync("drawRightAngledLine", id, connection.StartId, connection.EndId, connection.color, connection.thickness.ToString());
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 }

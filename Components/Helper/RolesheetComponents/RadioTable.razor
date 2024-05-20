@@ -10,7 +10,7 @@
                 string channel = Squad.SRRadioChannels[i];
                 <tr>
                     <td style="padding-right:10px;">
-                        @if (channel == Squad.SRRadioChannels[0])
+                        @if (i == 0)
                         {   
                             <img src="imgs/arma/radio/sr.svg" width=30 />
                         }
@@ -33,7 +33,7 @@
                 string channel = Squad.LRRadioChannels[i];
                 <tr>
                     <td style="padding-right:10px;">
-                        @if (channel == Squad.LRRadioChannels[0])
+                        @if (i == 0)
                         {   
                             <img src="imgs/arma/radio/lr.svg" width=30 />
                         }

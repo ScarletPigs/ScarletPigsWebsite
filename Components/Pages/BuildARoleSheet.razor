@@ -5,41 +5,40 @@
 
 <PageTitle>Build-A-Role-Sheet Tool</PageTitle>
 
-<!-- http://madletter.net/arma/rosters/07_stormchild@2x.png is the template to visually build off of -->
+<CascadingValue Value="HandleChange">
 
-<MudGrid Justify="Justify.SpaceAround">
-    <MudItem>
-        <MudPaper>
-            <MudText Typo="Typo.h3">Build-A-Role-Sheet Tool</MudText>
+    <MudGrid Justify="Justify.SpaceAround">
+        <MudItem>
+            <MudPaper>
+                <MudText Typo="Typo.h3">Build-A-Role-Sheet Tool</MudText>
 
-            <MudForm>
-                @* Need to add image upload ability *@
-                <MudTextField Label="Title" @bind-Value="@OPTitle" />
-                <MudTextField Label="Description" @bind-Value="@OPDescription" />
-                <MudTextField Label="Author" @bind-Value="@OPAuthor" />
-                <MudTextField Label="Join Order Comments" @bind-Value="@OPJoinOrderComment" />
-                <MudColorPicker Label="Background Color" @bind-Value="@BgColor" />
-                <MudColorPicker Label="Text Color" @bind-Value="@TextColor" />
+                <MudButton Color="Color.Primary" OnClick="@(e => StateHasChanged())">Rerender</MudButton>
 
-            </MudForm>
-                @foreach (Squad squad in Squads)
-                {
-                    <SquadBuilder Squad="squad" />
-                }
+                <MudForm>
+                    @* Need to add image upload ability *@
+                    <MudTextField Label="Title" @bind-Value="@OPTitle" />
+                    <MudTextField Label="Description" @bind-Value="@OPDescription" />
+                    <MudTextField Label="Author" @bind-Value="@OPAuthor" />
+                    <MudTextField Label="Join Order Comments" @bind-Value="@OPJoinOrderComment" />
+                    <MudColorPicker Label="Background Color" @bind-Value="@BgColor" />
+                    <MudColorPicker Label="Text Color" @bind-Value="@TextColor" />
 
-                <MudButton Color="Color.Success" OnClick="@(e => Squads.Add(new Squad()))">Add Squad</MudButton>
+                </MudForm>
+
+                    @foreach (Squad squad in Squads)
+                    {
+                        <SquadBuilder ParentSquadList="Squads" Squad="squad" />
+                    }
+
+                    <MudButton Color="Color.Success" OnClick="@(e => Squads.Add(new Squad()))">Add Squad</MudButton>
             
-        </MudPaper>
-    </MudItem>
-    <MudItem>
-        <MudPaper>
-            <RoleSheet @bind-SquadList="Squads" Title="@OPTitle" Description="@OPDescription" Author="@OPAuthor" JoinOrderComments="@OPJoinOrderComment" BgColor="@BgColor.Value" TextColor="@TextColor.Value" />
-        </MudPaper>
-    </MudItem>
-</MudGrid>
+            </MudPaper>
+        </MudItem>
+        <MudItem>
+            <MudPaper>
+                <RoleSheet @bind-SquadList="Squads" Title="@OPTitle" Description="@OPDescription" Author="@OPAuthor" JoinOrderComments="@OPJoinOrderComment" BgColor="@BgColor.Value" TextColor="@TextColor.Value" />
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
 
-
-<MudText Typo="Typo.h3">
-    
-</MudText>
-
+</CascadingValue>

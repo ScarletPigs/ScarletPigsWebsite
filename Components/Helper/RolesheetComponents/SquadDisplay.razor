@@ -33,7 +33,15 @@
                         {
                             <li>
                                 <p style="margin:0px;">
-                                    <img src="@role.Icon" alt="@role.Name" style="width:2em;height:2em;" />
+                                    <span style="width:2em;height:2em;">
+                                        @if (!string.IsNullOrEmpty(role.Icon))
+                                        {
+                                            <img src="@role.Icon" alt="@role.Name" style="width:2em;height:2em;" />
+                                        } else 
+                                        {
+                                            <p style="width:2em;height:1em;display:inline-block;padding:0px;margin:0px;"></p>
+                                        }
+                                    </span>
                                     <span>@role.Name.PadRight(20, '.')</span>
                                     <span>@role.AssignedPlayer.PadRight(20, ' ')</span>
                                 </p>

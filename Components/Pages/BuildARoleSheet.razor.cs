@@ -119,5 +119,10 @@ namespace ScarletPigsWebsite.Components.Pages
             return base.OnInitializedAsync();
         }
 
+        private void HandleChange()
+        {
+            StateHasChanged();
+        }
+
     }
 }

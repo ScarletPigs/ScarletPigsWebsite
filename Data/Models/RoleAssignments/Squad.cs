@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace ScarletPigsWebsite.Data.Models.RoleAssignments
+﻿namespace ScarletPigsWebsite.Data.Models.RoleAssignments
 {
-    public class Squad
+    public class Squad 
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Callsign { get; set; }
@@ -12,5 +10,16 @@ namespace ScarletPigsWebsite.Data.Models.RoleAssignments
         public string[] LRRadioChannels { get; set; }
         public List<Role> Roles { get; set; }
         public List<Squad> Squads { get; set; } = new List<Squad>();
+
+        public Squad()
+        {
+            Callsign = "";
+            DescriptiveName = "";
+            Description = "";
+            SRRadioChannels = new string[] { "", "", "" };
+            LRRadioChannels = new string[] { "", "", "" };
+            Roles = new List<Role>();
+            Squads = new List<Squad>();
+        }
     }
 }

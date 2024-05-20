@@ -8,5 +8,15 @@
         public string? AssignedPlayer { get; set; }
         public string[]? DLCsRequired { get; set; }
         public string[]? TrainingRequired { get; set; }
+
+        public Role()
+        {
+            Name = "";
+            Description = "";
+            Icon = "";
+            AssignedPlayer = "";
+            DLCsRequired = new string[] { };
+            TrainingRequired = new string[] { };
+        }
     }
 }
