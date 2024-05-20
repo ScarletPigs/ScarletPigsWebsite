@@ -1,0 +1,23 @@
+﻿@using System.Globalization
+<div style="position: absolute; width: 100%; height: 100%; overflow: visible">
+    <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%">
+        <line x1="@X1.ToString(CultureInfo.InvariantCulture)" y1="@Y1.ToString(CultureInfo.InvariantCulture)"
+              x2="@X2.ToString(CultureInfo.InvariantCulture)" y2="@Y2.ToString(CultureInfo.InvariantCulture)"
+              style="stroke:@Color; stroke-width:@Thickness" />
+    </svg>
+</div>
+
+@code {
+    [Parameter] 
+    public double X1 { get; set; }
+    [Parameter] 
+    public double Y1 { get; set; }
+    [Parameter] 
+    public double X2 { get; set; }
+    [Parameter] 
+    public double Y2 { get; set; }
+    [Parameter] 
+    public string Color { get; set; } = "black";
+    [Parameter] 
+    public double Thickness { get; set; } = 2;
+}
