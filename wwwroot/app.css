@@ -4,6 +4,7 @@
 	but it is exclusively employed in the 'App.razor' component when authentication is enabled.
 */
 
+
 @font-face {
     font-family: 'Aero Matics';
     src: url('/fonts/AeroMatics/Aero Matics Regular.ttf');
