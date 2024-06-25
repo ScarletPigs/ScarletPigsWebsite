@@ -1,12 +1,36 @@
 ﻿using Heron.MudCalendar;
+using ScarletPigsWebsite.Data.Models.JSON;
 using ScarletPigsWebsite.Data.Models.Modsets;
 using System.Text.Json.Serialization;
 
 namespace ScarletPigsWebsite.Data.Models.Events
 {
-    public class Event : CalendarItem
+    public class Event
     {
-        public new string Id { get; set; } = Guid.NewGuid().ToString();
+        [JsonConverter(typeof(AutoNumberToStringConverter))]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string Name { get; set; }
+        public string Description { get; set; }
+        [JsonIgnore]
+        public EventType EventType { get; set; }
+        [JsonIgnore]
+        public string Author { get; set; }
+        public DateTime CreatedAt { get; set; }
+        [JsonPropertyName("lastModified")]
+        public DateTime LastUpdatedAt { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        [JsonIgnore]
+        public Modset Modset { get; set; }
+
+        public CalendarEvent ToCalendarEvent()
+        {
+            return new CalendarEvent(this);
+        }
+    }
+
+    public class CalendarEvent : CalendarItem
+    {
         public string Name { get; set; }
         public string Description { get; set; }
         public EventType EventType { get; set; }
@@ -17,40 +41,32 @@ namespace ScarletPigsWebsite.Data.Models.Events
         public DateTime EndTime { get; set; }
         public Modset Modset { get; set; }
 
-        [JsonIgnore]
-        public new string Text
+        public CalendarEvent(Event apievent)
         {
-            get => Name;
-            set => Name = value;
-        }
+            Name = apievent.Name;
+            Description = apievent.Description;
+            EventType = apievent.EventType;
+            Author = apievent.Author;
+            CreatedAt = apievent.CreatedAt;
+            LastUpdatedAt = apievent.LastUpdatedAt;
+            StartTime = apievent.StartTime;
+            EndTime = apievent.EndTime;
+            Modset = apievent.Modset;
 
-        [JsonIgnore]
-        public new DateTime Start
-        {
-            get => StartTime;
-            set => StartTime = value;
-        }
+            if (Modset == null)
+            {
+                Modset = new Modset();
+            }
+            if (EventType == null)
+            {
+                EventType = new EventType();
+            }
 
-        [JsonIgnore]
-        public new DateTime End
-        {
-            get => EndTime;
-            set => EndTime = value;
-        }
-
-        public new bool AllDay { get; set; } = false;
-
-        public Event()
-        {
-            Name = "";
-            Description = "";
-            EventType = new EventType();
-            Author = "";
-            CreatedAt = DateTime.Now;
-            LastUpdatedAt = DateTime.Now;
-            StartTime = DateTime.Now;
-            EndTime = DateTime.Now;
-            Modset = new Modset();
+            // Set the calendar item properties
+            Text = Name;
+            Start = StartTime;
+            End = EndTime;
+            AllDay = false;
         }
     }
 }
