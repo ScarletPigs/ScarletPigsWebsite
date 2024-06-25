@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using ScarletPigsWebsite.Data.Models.Events
 
 <PageTitle>Home</PageTitle>
 
@@ -9,7 +10,14 @@
 <MudContainer>
     <MudText Typo="Typo.h3" GutterBottom="true" Class="mt-2 align-self-center">Scarletpigs event schedule</MudText>
 
-    <MudCalendar MonthCellMinHeight="100" ShowDay="false" />
+    <MudCalendar Items="Events" MonthCellMinHeight="100" ShowDay="false">
+        <CellTemplate>
+            <div style="width: 100%; height: 100%; border: 2px solid chartreuse)">
+                <div style="background-color: chartreuse)"><MudText Style="color: #ffffff;" Typo="Typo.body1" Align="Align.Center">@(((CalendarEvent)context).Name)</MudText></div>
+                <div class="pa-2"><MudText Typo="Typo.body2">@(((CalendarEvent)context).Description)</MudText></div>
+            </div>
+        </CellTemplate>
+    </MudCalendar>
 </MudContainer>
 
 <MudContainer>

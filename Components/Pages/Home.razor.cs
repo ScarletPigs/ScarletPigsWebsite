@@ -10,11 +10,11 @@ namespace ScarletPigsWebsite.Components.Pages
         [Inject]
         public IScarletPigsApi ScarletPigsApi { get; set; } = default!;
 
-        public List<Event> Events { get; set; } = new List<Event>();
+        public List<CalendarEvent> Events { get; set; } = new List<CalendarEvent>();
 
         protected override async Task OnInitializedAsync()
         {
-            Events = await ScarletPigsApi.GetEventsAsync();
+            Events = (await ScarletPigsApi.GetEventsAsync()).Select(e => e.ToCalendarEvent()).ToList();
         }
     }
 }
