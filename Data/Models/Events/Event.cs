@@ -1,11 +1,12 @@
-﻿using ScarletPigsWebsite.Data.Models.Modsets;
+﻿using Heron.MudCalendar;
+using ScarletPigsWebsite.Data.Models.Modsets;
 using System.Text.Json.Serialization;
 
 namespace ScarletPigsWebsite.Data.Models.Events
 {
-    public class Event
+    public class Event : CalendarItem
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public new string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; }
         public string Description { get; set; }
         public EventType EventType { get; set; }
@@ -15,6 +16,29 @@ namespace ScarletPigsWebsite.Data.Models.Events
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public Modset Modset { get; set; }
+
+        [JsonIgnore]
+        public new string Text
+        {
+            get => Name;
+            set => Name = value;
+        }
+
+        [JsonIgnore]
+        public new DateTime Start
+        {
+            get => StartTime;
+            set => StartTime = value;
+        }
+
+        [JsonIgnore]
+        public new DateTime End
+        {
+            get => EndTime;
+            set => EndTime = value;
+        }
+
+        public new bool AllDay { get; set; } = false;
 
         public Event()
         {
