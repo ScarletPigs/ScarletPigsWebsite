@@ -1,4 +1,5 @@
 ﻿using ScarletPigsWebsite.Data.Models.Modsets;
+using System.Text.Json.Serialization;
 
 namespace ScarletPigsWebsite.Data.Models.Events
 {

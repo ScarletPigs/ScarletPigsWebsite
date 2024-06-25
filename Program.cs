@@ -5,6 +5,7 @@ using ScarletPigsWebsite.Components;
 using ScarletPigsWebsite.Components.Account;
 using ScarletPigsWebsite.Data;
 using MudBlazor.Services;
+using ScarletPigsWebsite.Data.Services.HTTP;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,12 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+
+// Add http client services
+builder.Services.AddHttpClient<IScarletPigsApi, ScarletPigsApi>(client =>
+{
+    client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_URL") ?? "");
+});
 
 builder.Services.AddAuthentication(options =>
     {
