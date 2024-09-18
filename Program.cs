@@ -23,7 +23,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuth
 // Add http client services
 builder.Services.AddHttpClient<IScarletPigsApi, ScarletPigsApi>(client =>
 {
-    client.BaseAddress = new Uri(/*Environment.GetEnvironmentVariable("API_URL") ?? */"http://api.scarletpigs.com");
+    client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_URL") ?? "");
 });
 
 builder.Services.AddAuthentication(options =>
