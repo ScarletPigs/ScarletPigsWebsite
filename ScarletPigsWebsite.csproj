@@ -6,8 +6,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-ScarletPigsWebsite-4455e0d9-cc13-460e-b351-c1800708b4b6</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileRunEnvironmentFiles>settings.env</DockerfileRunEnvironmentFiles>
     <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Properties\launchSettings.development.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_WebToolingArtifacts Remove="Properties\launchSettings.development.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
@@ -16,6 +25,7 @@
   
   
   <ItemGroup>
+    <PackageReference Include="AspNet.Security.OAuth.Discord" Version="8.2.0" />
     <PackageReference Include="Heron.MudCalendar" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.*" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.*" />
@@ -30,6 +40,16 @@
   <ItemGroup>
     <Folder Include="Components\Icons\" />
     <Folder Include="wwwroot\fonts\AeroMatics\" />
+  </ItemGroup>
+
+  
+  
+  <ItemGroup>
+    <None Include="Properties\launchSettings.development.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

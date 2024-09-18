@@ -9,7 +9,7 @@
 <MudLayout>
     <MudAppBar ToolBarClass="d-flex justify-content-between" Elevation="1" Class="d-flex justify-content-center">
 
-        <MudElement Class="d-inline-flex justify-content-around w-100">
+        <MudElement Class="d-inline-flex justify-content-start w-100">
             <MudButton Href="" Style="width:105px;">Home</MudButton>
 
         </MudElement>
@@ -19,7 +19,7 @@
         </a>
 
 
-        <MudElement Class="d-inline-flex justify-content-around w-100">
+        <MudElement Class="d-inline-flex justify-content-end w-100">
             <MudMenu Label="Tools" ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Style="width:105px;" Class="rounded-0">
                 <ActivatorContent>
                     <MudButton Style="width:105px;">Tools</MudButton>
@@ -27,6 +27,23 @@
                 <ChildContent>
                     <MudMenuItem Icon="@Icons.Material.Filled.List" Href="build-a-role-sheet">Build-A-Role-Sheet</MudMenuItem>
                 </ChildContent>
+            </MudMenu>
+            <MudMenu Label="Profile" ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Style="width:105px;" Class="rounded-0">
+                <ActivatorContent>
+                    <MudButton Style="width:105px;">Profile</MudButton>
+                </ActivatorContent>
+                <ChildContent>
+                    <AuthorizeView>
+                        <Authorized>
+                            <MudMenuItem Icon="@Icons.Material.Filled.List" Href="auth">@context.User.Identity?.Name</MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.List" >Logout</MudMenuItem>
+                        </Authorized>
+                        <NotAuthorized>
+                            <MudMenuItem Icon="@Icons.Material.Filled.List" Href="Account/Login">Login</MudMenuItem>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </ChildContent>
+
             </MudMenu>
         </MudElement>
 
@@ -49,11 +66,11 @@
     {
         Palette = new PaletteLight()
         {
-            
+
         },
         PaletteDark = new PaletteDark()
         {
-            
+
         }
     };
 
@@ -73,9 +90,14 @@
         StateHasChanged();
         return Task.CompletedTask;
     }
-    
+
     private void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    private async void Login()
+    {
+        
     }
 }

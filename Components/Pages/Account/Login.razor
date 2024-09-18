@@ -1,0 +1,29 @@
+﻿@page "/Account/Login"
+@using Microsoft.AspNetCore.Authentication
+@inject HttpContext _httpContext
+
+<MudContainer>
+    <MudPaper Elevation="3" Padding="16px">
+        <MudText Typo="Typo.h4">Login</MudText>
+        <MudText Typo="Typo.body2">Please select your login method:</MudText>
+        <MudList>
+            
+            <MudButton OnClick="@ButtonClicked" Variant="Variant.Filled" Color="Color.Primary">Login</MudButton>
+        </MudList>
+    </MudPaper>
+</MudContainer>
+
+@code {
+
+    public AuthenticationScheme[] schemes = Array.Empty<AuthenticationScheme>();
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+
+    private void ButtonClicked()
+    {
+        _httpContext.AuthenticateAsync();
+    }
+
+}
