@@ -4,9 +4,9 @@
 
 
 
-@if (SVGContainer == null)
+@if (true)
 {
-    <SVGPath @ref="_SVGContainer" />
+    <SVGPath @ref="@_SVGContainer" />
 }
 
 <div>
@@ -79,7 +79,7 @@
     @foreach (Squad squad in Squad.Squads)
     {
         <div style="padding-left:50px;">
-            <SquadDisplay SVGContainer="@_SVGContainer" ParentSquad="@Squad" Squad="@squad" TextColor="@TextColor" />
+            <SquadDisplay ParentSquad="@Squad" Squad="@squad" TextColor="@TextColor" />
         </div>
     }
 }
@@ -99,9 +99,6 @@
 
 
     [Parameter]
-    public SVGPath? SVGContainer { get; set; } = null;
-
-    [Parameter]
     public ElementReference ParentSquadDisplayRef { get; set; }
     [Parameter]
     public EventCallback<ElementReference> ParentSquadDisplayRefChanged { get; set; }
@@ -118,26 +115,14 @@
     private bool IsParent { get; set; } = false;
 
 
-    protected override Task OnInitializedAsync()
-    {
-
-        return base.OnInitializedAsync();
-    }
-
 
     protected override async Task OnParametersSetAsync()
     {
-        if (SVGContainer != null)
-        {
-            _SVGContainer = SVGContainer;
-        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (ParentSquad != null)
-        {
-            await _SVGContainer.AddConnection(ParentSquad.Id, Squad.Id);
-        }
+        foreach (Squad subsquad in Squad.Squads)
+            await _SVGContainer?.AddConnection(Squad.Id, subsquad.Id);
     }
 }

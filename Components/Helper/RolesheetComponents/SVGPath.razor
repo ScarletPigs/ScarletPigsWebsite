@@ -2,7 +2,7 @@
 @using System.Collections.ObjectModel
 @inject IJSRuntime JSRuntime
 
-<div id="@id" style="position:absolute; left:0; top:0; right:0; bottom:0;">
+<div id="@id" class="cool-svg-drawing-thing" style="position:absolute; left:0; top:0; right:0; bottom:0;">
     <svg style="width: 100%; height: 100%">
         <!-- SVG content is dynamically handled by JS -->
     </svg>
@@ -28,12 +28,21 @@
         if (string.IsNullOrEmpty(startId) || string.IsNullOrEmpty(endId))
             throw new ArgumentException("Id cannot be null");
 
+        if (Connections.Any(x => (x.StartId == startId && x.EndId == endId) || (x.StartId == endId && x.EndId == startId)))
+            return;
+
         Connections.Add((startId, endId, color, thickness));
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        await ClearLines();
         await RenderSVGPaths();
+    }
+
+    private async Task ClearLines()
+    {
+        await JSRuntime.InvokeVoidAsync("clearLines", id);
     }
 
     private async Task RenderSVGPaths()

@@ -12,15 +12,19 @@
 
     <MudCalendar Items="Events" MonthCellMinHeight="100" ShowDay="false">
         <CellTemplate>
-            <div style="width: 100%; height: 100%; border: 2px solid chartreuse)">
-                <div style="background-color: chartreuse)"><MudText Style="color: #ffffff;" Typo="Typo.body1" Align="Align.Center">@(((CalendarEvent)context).Name)</MudText></div>
-                <div class="pa-2"><MudText Typo="Typo.body2">@(((CalendarEvent)context).Description)</MudText></div>
+            <div style="width: 100%; height: 100%; border: 2px solid chartreuse">
+                <div style="background-color: chartreuse)">
+                    <MudText Style="color: #ffffff;" Typo="Typo.body1" Align="Align.Center">@(((CalendarEvent)context).Name)</MudText>
+                </div>
+                <div class="pa-2">
+                    <MudText Typo="Typo.body2">@(((CalendarEvent)context).Description)</MudText>
+                </div>
             </div>
         </CellTemplate>
     </MudCalendar>
 </MudContainer>
 
-<MudContainer>
+@* <MudContainer>
     <MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
     <MudText Class="mb-8">Welcome to your new app, powered by MudBlazor and the .NET 8 Template!</MudText>
 
@@ -75,5 +79,5 @@
             More details
         </MudLink>
     </MudText>
-</MudContainer>
+</MudContainer> *@
 
