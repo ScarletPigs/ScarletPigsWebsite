@@ -20,10 +20,13 @@ builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
+
+
 // Add http client services
+string apiurl = Environment.GetEnvironmentVariable("API_URL");
 builder.Services.AddHttpClient<IScarletPigsApi, ScarletPigsApi>(client =>
 {
-    client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_URL") ?? "");
+    client.BaseAddress = new Uri(apiurl ?? "");
 });
 
 builder.Services.AddAuthentication(options =>
@@ -55,12 +58,10 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
 
