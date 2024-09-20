@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 
-<MudThemingProvider @ref="_mudThemeProvider" IsDarkMode="true" />
+<MudThemeProvider @ref="_mudThemeProvider" IsDarkMode="true" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -26,6 +26,7 @@
                 </ActivatorContent>
                 <ChildContent>
                     <MudMenuItem Icon="@Icons.Material.Filled.List" Href="build-a-role-sheet">Build-A-Role-Sheet</MudMenuItem>
+                    <MudMenuItem Icon="@Icons.Material.Filled.Terminal" Href="command-line-generator">Commandline Generator</MudMenuItem>
                 </ChildContent>
             </MudMenu>
         </MudElement>
@@ -42,12 +43,12 @@
 @code {
     private bool _isDarkMode = false;
     private bool _drawerOpen = true;
-    private MudThemingProvider _mudThemeProvider { get; set; } = default!; 
+    private MudThemeProvider _mudThemeProvider { get; set; } = default!;
 
     // For use to customize the theme for the future
     private MudTheme MudTheme = new MudTheme()
     {
-        Palette = new PaletteLight()
+        PaletteLight = new PaletteLight()
         {
             
         },
