@@ -10,18 +10,6 @@ using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//// Configure kestrel to only listen on port 8080 for http
-//builder.WebHost.ConfigureKestrel(options =>
-//{
-//    options.ListenAnyIP(8080);
-
-//#if DEBUG
-//    options.ListenAnyIP(8081);
-//#endif
-//});
-
-
-
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -73,13 +61,14 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
-    //app.UseHttpsRedirection();
-    //app.UseHsts();
 }
 else
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    //app.UseHsts();
 }
+
+//app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
