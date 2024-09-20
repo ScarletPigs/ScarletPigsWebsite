@@ -6,8 +6,22 @@ using ScarletPigsWebsite.Components.Account;
 using ScarletPigsWebsite.Data;
 using MudBlazor.Services;
 using ScarletPigsWebsite.Data.Services.HTTP;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//// Configure kestrel to only listen on port 8080 for http
+//builder.WebHost.ConfigureKestrel(options =>
+//{
+//    options.ListenAnyIP(8080);
+
+//#if DEBUG
+//    options.ListenAnyIP(8081);
+//#endif
+//});
+
+
+
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -50,18 +64,23 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 
 var app = builder.Build();
 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    //app.UseHttpsRedirection();
+    //app.UseHsts();
 }
 else
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
@@ -70,5 +89,7 @@ app.MapRazorComponents<App>()
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
+
+
 
 app.Run();
