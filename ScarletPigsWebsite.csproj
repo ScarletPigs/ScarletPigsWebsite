@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-ScarletPigsWebsite-4455e0d9-cc13-460e-b351-c1800708b4b6</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileRunEnvironmentFiles>settings.env</DockerfileRunEnvironmentFiles>
     <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
