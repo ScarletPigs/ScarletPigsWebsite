@@ -1,6 +1,6 @@
-﻿namespace ScarletPigsWebsite.Data.Models.Modsets
+﻿namespace ScarletPigsWebsite.Data.Models.ModLists
 {
-    public class Modset
+    public partial class ModList
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; }
@@ -9,15 +9,5 @@
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
         public List<Mod> Mods { get; set; }
-
-        public Modset()
-        {
-            Name = "";
-            Description = "";
-            Author = "";
-            CreatedAt = DateTime.Now;
-            LastUpdatedAt = DateTime.Now;
-            Mods = new List<Mod>();
-        }
     }
 }

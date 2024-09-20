@@ -1,6 +1,6 @@
 ﻿using Heron.MudCalendar;
 using ScarletPigsWebsite.Data.Models.JSON;
-using ScarletPigsWebsite.Data.Models.Modsets;
+using ScarletPigsWebsite.Data.Models.ModLists;
 using System.Text.Json.Serialization;
 
 namespace ScarletPigsWebsite.Data.Models.Events
@@ -21,7 +21,7 @@ namespace ScarletPigsWebsite.Data.Models.Events
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         [JsonIgnore]
-        public Modset Modset { get; set; }
+        public ModList Modset { get; set; }
 
         public CalendarEvent ToCalendarEvent()
         {
@@ -39,7 +39,7 @@ namespace ScarletPigsWebsite.Data.Models.Events
         public DateTime LastUpdatedAt { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public Modset Modset { get; set; }
+        public ModList Modset { get; set; }
 
         public CalendarEvent(Event apievent)
         {
@@ -55,7 +55,7 @@ namespace ScarletPigsWebsite.Data.Models.Events
 
             if (Modset == null)
             {
-                Modset = new Modset();
+                Modset = new ModList();
             }
             if (EventType == null)
             {
