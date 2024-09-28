@@ -35,7 +35,7 @@ namespace ScarletPigsWebsite.Data.Models.ModLists
             string pattern = @"[.()!:/]+";
 
             // Replace invalid characters with an empty string
-            return Regex.Replace(Name, pattern, string.Empty);
+            return $"@{Regex.Replace(Name, pattern, string.Empty)}";
         }
     }
 }
