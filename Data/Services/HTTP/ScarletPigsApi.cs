@@ -18,7 +18,7 @@ namespace ScarletPigsWebsite.Data.Services.HTTP
 
         public async Task<List<Event>> GetEventsAsync()
         {
-            return await _httpClient.GetFromJsonAsync<List<Event>>("events/") ?? new List<Event>();
+            return (await _httpClient.GetFromJsonAsync<List<Event>>("events/")) ?? new List<Event>();
         }
     }
 }
