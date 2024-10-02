@@ -10,6 +10,17 @@
 <MudContainer>
     <MudText Typo="Typo.h3" GutterBottom="true" Class="mt-2 align-self-center">Scarletpigs event schedule</MudText>
 
+    <MudText>User: @((User != null) ? User.Identity.Name : "Not logged in")</MudText>
+
+    <MudButton Href="signin">Signin</MudButton>
+
+    <MudButton Href="signout">Signout</MudButton>
+
+    <MudText>
+        @Token
+    </MudText>
+
+
     <MudCalendar Items="Events" MonthCellMinHeight="100" ShowDay="false">
         <CellTemplate>
             <div style="width: 100%; height: 100%; border: 2px solid rgb(116, 23, 27);">
