@@ -2,7 +2,11 @@
 @namespace ScarletPigsWebsite.Components.Pages
 @using MudBlazor
 @using Microsoft.AspNetCore.Components.Forms
+@using ScarletPigsWebsite.Data.Enums
+@using ScarletPigsWebsite.Data.Models.Helpers
 @using ScarletPigsWebsite.Data.Models.ModLists
+@using ScarletPigsWebsite.Data.Services.HTTP
+@using System.Text.RegularExpressions
 
 @inject IJSRuntime JS
 @inject ISnackbar Snackbar
@@ -18,7 +22,7 @@
             <MudFileUpload T="IReadOnlyList<IBrowserFile>"
                            @ref="@_fileUpload"
                            OnFilesChanged="OnInputFileChanged"
-                           AppendMultipleFiles ="false"
+                           AppendMultipleFiles="false"
                            Accept=".txt,.html"
                            Hidden="@false"
                            InputClass="absolute mud-width-full mud-height-full overflow-hidden z-10"
@@ -40,18 +44,55 @@
             </MudFileUpload>
         </MudItem>
 
+        <MudItem xs="12">
+            <MudText Typo="Typo.h6" Align="Align.Center">or generate from mod Ids</MudText>
+        </MudItem>
+
+        <MudItem xs="12">
+            <MudTextField @bind-Value="@customIdText"
+                          Immediate="true"
+                          Label="Add mod ids here"
+                          Variant="Variant.Outlined"
+                          AutoGrow=true
+                          Lines="3"
+                          MaxLines="6"
+                          Style="width: 100%;" />
+        </MudItem>
+        @if (!string.IsNullOrEmpty(customIdText))
+        {
+            <MudItem xs="12" Style="margin-top: 5px; display: flex; justify-content: left;">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GenerateCommandlineFromText">
+                    Generate commandline
+                </MudButton>
+            </MudItem>
+        }
+
         @if (!string.IsNullOrEmpty(commandLine))
         {
+            <MudItem xs="12" sm="6" md="4">
+                <MudSelect T="Mod" Label="No DLCs" HelperText="Select DLCs here" @bind-SelectedValues="selectedDlcs" OnClose="OnDlcValueChanged"
+                           ToStringFunc="@converter"
+                           MultiSelection="true"
+                           OpenIcon="@Icons.Material.Filled.Extension" AdornmentColor="Color.Primary">
+                    @foreach (Mod mod in availableDlcs)
+                    {
+                        <MudSelectItem Value="@mod">@mod.Name</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
             <MudItem xs="12" Style="margin-top: 5px;">
                 <MudTextField @bind-Value="@commandLine"
                               ReadOnly="true"
                               Label="Command Line"
                               Style="width: 100%;" />
             </MudItem>
-            <MudButton OnClick="@CopyToClipboard" Color="Color.Primary" Variant="Variant.Filled">
-                Copy
-            </MudButton>
+            <MudItem xs="12" Style="margin-top: 10px; display: flex; justify-content: center;">
+                <MudButton OnClick="@CopyToClipboard" Color="Color.Primary" Variant="Variant.Filled">
+                    Copy
+                </MudButton>
+            </MudItem>
         }
+
     </MudGrid>
 </MudContainer>
 
@@ -61,8 +102,15 @@
     private const string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
     private string _dragClass = DefaultDragClass;
     private string commandLine = string.Empty;
-    //private readonly List<string> _fileNames = new();
     private MudFileUpload<IReadOnlyList<IBrowserFile>>? _fileUpload;
+
+    private ModList? currentModlist { get; set; }
+    private List<Mod> availableDlcs = ModList.GetAvailableDlcs();
+    public IEnumerable<Mod> selectedDlcs { get; set; } = new HashSet<Mod>();
+
+    [Inject]
+    public ISteamworksApi SteamworksApi { get; set; } = default!;
+    private string customIdText;
 
     private async Task ClearAsync()
     {
@@ -85,12 +133,7 @@
             // Load the mod list
             ModList modList = await ModList.CreateModListFromFileAsync(files[0]);
 
-            commandLine = modList.GetCommandLine();
-
-            Snackbar.Add("Command line created!", Severity.Success);
-
-            // Ensure the UI updates
-            StateHasChanged();
+            UpdateCommandLine(modList);
         }
         catch (Exception ex)
         {
@@ -132,6 +175,82 @@
         return true;
     }
 
+    private List<string> GetModIdsFromString(string text)
+    {
+        //find all numbers in the input text.
+        MatchCollection matches = Regex.Matches(text, @"\d+");
+
+        List<string> modIds = new List<string>();
+        foreach (Match match in matches)
+        {
+            // Add the matched number to the list if it is > 0 and <= 64-bit unsigned integer
+            if(ulong.TryParse(match.Value, out ulong result))
+            {
+                //0 is not a valid mod id
+                if(result > 0)
+                    modIds.Add(match.Value);
+            }
+        }
+
+        return modIds;
+    }
+
+    private async void GenerateCommandlineFromText()
+    {
+        try
+        {
+            List<string> modIds = GetModIdsFromString(customIdText);
+
+            if (modIds.Count == 0)
+            {
+                Snackbar.Add("No mod ids found in the text.", Severity.Error);
+                return;
+            }
+
+            var response = await SteamworksApi.GetWorkshopModDetailsAsync(modIds);
+            if (response == null)
+            {
+                Snackbar.Add("Failed to get mod details from Steam.", Severity.Error);
+                return;
+            }
+
+            // Create a mod list from the response
+            ModList modList = ModList.CreateModListFromSteamIds(response);
+
+            var foundDlcs = ModList.FindDlcFromIds(modIds);
+            modList.UpdateDlcs(foundDlcs);
+
+            if (modList == null)
+            {
+                Snackbar.Add("Failed to generate modlist.", Severity.Error);
+                return;
+            }
+            if (modList.Mods.Count == 0)
+            {
+                Snackbar.Add("No mods found.", Severity.Error);
+                return;
+            }
+
+            UpdateCommandLine(modList);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to generate command line: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private void UpdateCommandLine(ModList newModlist)
+    {
+        currentModlist = newModlist;
+        commandLine = newModlist.GetCommandLine();
+        selectedDlcs = newModlist.Dlcs;
+
+        Snackbar.Add("Command line created!", Severity.Success);
+
+        // Ensure the UI updates
+        StateHasChanged();
+    }
+
     private async Task CopyToClipboard()
     {
         try
@@ -144,6 +263,18 @@
             Snackbar.Add($"Failed to copy: {ex.Message}", Severity.Error);
         }
     }
+
+    private void OnDlcValueChanged()
+    {
+        if (currentModlist == null)
+            return;
+
+        bool dlcChanged = currentModlist.UpdateDlcs(selectedDlcs.ToList());
+        if(dlcChanged)
+            commandLine = currentModlist.GetCommandLine();
+    }
+
+    Func<Mod, string> converter = m => m?.Name;
 
     private void SetDragClass()
         => _dragClass = $"{DefaultDragClass} mud-border-primary";

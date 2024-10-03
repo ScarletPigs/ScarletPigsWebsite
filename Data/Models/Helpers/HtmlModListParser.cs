@@ -18,39 +18,40 @@ namespace ScarletPigsWebsite.Data.Models.Helpers
                 string presetName = GetPresetName(file, doc);
 
                 List<Mod> modEntries = GetModEntriesFromDocument(doc);
-                List<Mod> cdlcEntries = GetCdlcEntriesFromDocument(doc);
+                List<Mod> dlcEntries = GetDlcEntriesFromDocument(doc);
 
                 //order by cDLC first, then order by Name
-                var allMods = cdlcEntries.Concat(modEntries)
-                    .OrderBy(mod => mod.IsCdlc() ? 0 : 1) // Order by IsCdlc: cDLC first
-                    .ThenBy(mod => mod.Name) // Then order by Name
-                    .ToList();
+
+                modEntries = modEntries.OrderBy(mod => mod.Name).ToList();
+                dlcEntries = dlcEntries.OrderBy(mod => mod.Name).ToList();
 
                 ModList modlist = new ModList()
                 {
                     Name = presetName,
-                    Mods = allMods
+                    Mods = modEntries,
+                    Dlcs = dlcEntries
                 };
 
                 return modlist;
             }
         }
 
-        private static List<Mod> GetCdlcEntriesFromDocument(XDocument doc)
+        private static List<Mod> GetDlcEntriesFromDocument(XDocument doc)
         {
-
             // Query for DlcContainer entries, if they exist
             var cdlcEntries = doc.Descendants("tr")
                 .Where(tr => tr.Attribute("data-type")?.Value == "DlcContainer")
                 .Select(tr => new Mod
                 {
-                    Name = tr.Elements("td").FirstOrDefault(td => td.Attribute("data-type")?.Value == "DisplayName")?.Value,
+                    Name = tr.Elements("td")
+                        .FirstOrDefault(td => td.Attribute("data-type")?.Value == "DisplayName")?.Value ?? "Unknown", // Default to "Unknown" if Name is not found
                     UID = ExtractIdFromUrl(tr.Elements("td")
-                        .Skip(1) // Change this to Skip(1) to access the second <td>
+                        .Skip(1) // Skip the first <td> to access the second <td>
                         .Select(td => td.Elements("a").FirstOrDefault()?.Attribute("href")?.Value) // Access the <a> tag's href attribute
-                        .FirstOrDefault())
+                        .FirstOrDefault()) ?? string.Empty // Default to empty if no href is found
                 })
                 .ToList();
+
             return cdlcEntries;
         }
 
