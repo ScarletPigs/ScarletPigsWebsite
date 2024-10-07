@@ -31,6 +31,11 @@ builder.Services.AddHttpClient<IScarletPigsApi, ScarletPigsApi>(client =>
     client.BaseAddress = new Uri(apiurl ?? "");
 });
 
+builder.Services.AddHttpClient<ISteamworksApi, SteamworksApi>(client =>
+{
+    client.BaseAddress = new Uri("https://api.steampowered.com/");
+});
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = IdentityConstants.ApplicationScheme;

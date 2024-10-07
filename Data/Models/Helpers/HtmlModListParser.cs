@@ -17,40 +17,41 @@ namespace ScarletPigsWebsite.Data.Models.Helpers
                 XDocument doc = XDocument.Parse(content);
                 string presetName = GetPresetName(file, doc);
 
-                List<Mod> modEntries = GetModEntriesFromDocument(doc);
-                List<Mod> cdlcEntries = GetCdlcEntriesFromDocument(doc);
+                HashSet<Mod> modEntries = GetModEntriesFromDocument(doc);
+                HashSet<Mod> dlcEntries = GetDlcEntriesFromDocument(doc);
 
                 //order by cDLC first, then order by Name
-                var allMods = cdlcEntries.Concat(modEntries)
-                    .OrderBy(mod => mod.IsCdlc() ? 0 : 1) // Order by IsCdlc: cDLC first
-                    .ThenBy(mod => mod.Name) // Then order by Name
-                    .ToList();
+
+                modEntries = modEntries.OrderBy(mod => mod.Name).ToHashSet();
+                dlcEntries = dlcEntries.OrderBy(mod => mod.Name).ToHashSet();
 
                 ModList modlist = new ModList()
                 {
                     Name = presetName,
-                    Mods = allMods
+                    Mods = modEntries,
+                    Dlcs = dlcEntries
                 };
 
                 return modlist;
             }
         }
 
-        private static List<Mod> GetCdlcEntriesFromDocument(XDocument doc)
+        private static HashSet<Mod> GetDlcEntriesFromDocument(XDocument doc)
         {
-
             // Query for DlcContainer entries, if they exist
             var cdlcEntries = doc.Descendants("tr")
                 .Where(tr => tr.Attribute("data-type")?.Value == "DlcContainer")
                 .Select(tr => new Mod
                 {
-                    Name = tr.Elements("td").FirstOrDefault(td => td.Attribute("data-type")?.Value == "DisplayName")?.Value,
+                    Name = tr.Elements("td")
+                        .FirstOrDefault(td => td.Attribute("data-type")?.Value == "DisplayName")?.Value ?? "Unknown", // Default to "Unknown" if Name is not found
                     UID = ExtractIdFromUrl(tr.Elements("td")
-                        .Skip(1) // Change this to Skip(1) to access the second <td>
+                        .Skip(1) // Skip the first <td> to access the second <td>
                         .Select(td => td.Elements("a").FirstOrDefault()?.Attribute("href")?.Value) // Access the <a> tag's href attribute
-                        .FirstOrDefault())
+                        .FirstOrDefault()) ?? string.Empty // Default to empty if no href is found
                 })
-                .ToList();
+                .ToHashSet();
+
             return cdlcEntries;
         }
 
@@ -70,7 +71,7 @@ namespace ScarletPigsWebsite.Data.Models.Helpers
             return presetName;
         }
 
-        private static List<Mod> GetModEntriesFromDocument(XDocument doc)
+        private static HashSet<Mod> GetModEntriesFromDocument(XDocument doc)
         {
 
 
@@ -85,7 +86,7 @@ namespace ScarletPigsWebsite.Data.Models.Helpers
                         .Select(td => td.Elements("a").FirstOrDefault()?.Attribute("href")?.Value) // Access the <a> tag's href attribute
                         .FirstOrDefault())
                 })
-                .ToList();
+                .ToHashSet();
             return modEntries;
         }
 
