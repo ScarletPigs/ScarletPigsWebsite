@@ -18,8 +18,8 @@ namespace ScarletPigsWebsite.Data.Models.ModLists
             Author = "";
             CreatedAt = DateTime.Now;
             LastUpdatedAt = DateTime.Now;
-            Mods = new List<Mod>();
-            Dlcs = new List<Mod>();
+            Mods = new HashSet<Mod>();
+            Dlcs = new HashSet<Mod>();
         }
 
         public static async Task<ModList> CreateModListFromFileAsync(IBrowserFile file)
@@ -73,9 +73,9 @@ namespace ScarletPigsWebsite.Data.Models.ModLists
 
 
         //TODO: Move this to a database table on the server and clean up the enum stuff.
-        public static List<Mod> GetAvailableDlcs()
+        public static HashSet<Mod> GetAvailableDlcs()
         {
-            List<Mod> allDlcMods = new List<Mod>();
+            HashSet<Mod> allDlcMods = new HashSet<Mod>();
             foreach (DlcEnum dlc in Enum.GetValues(typeof(DlcEnum)))
             {
                 Mod mod = new Mod()
@@ -90,9 +90,9 @@ namespace ScarletPigsWebsite.Data.Models.ModLists
         }
 
         //see if any of the mods in the list are dlcs and return those
-        public static List<Mod> FindDlcFromIds(List<string> Uids)
+        public static HashSet<Mod> FindDlcFromIds(List<string> Uids)
         {
-            List<Mod> dlcs = new List<Mod>();
+            HashSet<Mod> dlcs = new HashSet<Mod>();
             foreach (string uid in Uids)
             {
                 if (int.TryParse(uid, out int uidValue))
@@ -113,7 +113,7 @@ namespace ScarletPigsWebsite.Data.Models.ModLists
         }
 
 
-        public bool UpdateDlcs(List<Mod> dlcs)
+        public bool UpdateDlcs(HashSet<Mod> dlcs)
         {
             if (dlcs.Count == Dlcs.Count && dlcs.All(Dlcs.Contains))
                 return false;

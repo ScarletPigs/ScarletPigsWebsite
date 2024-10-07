@@ -17,13 +17,13 @@ namespace ScarletPigsWebsite.Data.Models.Helpers
                 XDocument doc = XDocument.Parse(content);
                 string presetName = GetPresetName(file, doc);
 
-                List<Mod> modEntries = GetModEntriesFromDocument(doc);
-                List<Mod> dlcEntries = GetDlcEntriesFromDocument(doc);
+                HashSet<Mod> modEntries = GetModEntriesFromDocument(doc);
+                HashSet<Mod> dlcEntries = GetDlcEntriesFromDocument(doc);
 
                 //order by cDLC first, then order by Name
 
-                modEntries = modEntries.OrderBy(mod => mod.Name).ToList();
-                dlcEntries = dlcEntries.OrderBy(mod => mod.Name).ToList();
+                modEntries = modEntries.OrderBy(mod => mod.Name).ToHashSet();
+                dlcEntries = dlcEntries.OrderBy(mod => mod.Name).ToHashSet();
 
                 ModList modlist = new ModList()
                 {
@@ -36,7 +36,7 @@ namespace ScarletPigsWebsite.Data.Models.Helpers
             }
         }
 
-        private static List<Mod> GetDlcEntriesFromDocument(XDocument doc)
+        private static HashSet<Mod> GetDlcEntriesFromDocument(XDocument doc)
         {
             // Query for DlcContainer entries, if they exist
             var cdlcEntries = doc.Descendants("tr")
@@ -50,7 +50,7 @@ namespace ScarletPigsWebsite.Data.Models.Helpers
                         .Select(td => td.Elements("a").FirstOrDefault()?.Attribute("href")?.Value) // Access the <a> tag's href attribute
                         .FirstOrDefault()) ?? string.Empty // Default to empty if no href is found
                 })
-                .ToList();
+                .ToHashSet();
 
             return cdlcEntries;
         }
@@ -71,7 +71,7 @@ namespace ScarletPigsWebsite.Data.Models.Helpers
             return presetName;
         }
 
-        private static List<Mod> GetModEntriesFromDocument(XDocument doc)
+        private static HashSet<Mod> GetModEntriesFromDocument(XDocument doc)
         {
 
 
@@ -86,7 +86,7 @@ namespace ScarletPigsWebsite.Data.Models.Helpers
                         .Select(td => td.Elements("a").FirstOrDefault()?.Attribute("href")?.Value) // Access the <a> tag's href attribute
                         .FirstOrDefault())
                 })
-                .ToList();
+                .ToHashSet();
             return modEntries;
         }
 

@@ -105,7 +105,7 @@
     private MudFileUpload<IReadOnlyList<IBrowserFile>>? _fileUpload;
 
     private ModList? currentModlist { get; set; }
-    private List<Mod> availableDlcs = ModList.GetAvailableDlcs();
+    private HashSet<Mod> availableDlcs = ModList.GetAvailableDlcs();
     public IEnumerable<Mod> selectedDlcs { get; set; } = new HashSet<Mod>();
 
     [Inject]
@@ -269,7 +269,7 @@
         if (currentModlist == null)
             return;
 
-        bool dlcChanged = currentModlist.UpdateDlcs(selectedDlcs.ToList());
+        bool dlcChanged = currentModlist.UpdateDlcs(selectedDlcs.ToHashSet());
         if(dlcChanged)
             commandLine = currentModlist.GetCommandLine();
     }

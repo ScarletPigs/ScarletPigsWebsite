@@ -40,8 +40,12 @@ namespace ScarletPigsWebsite.Data.Models.ModLists
                 return EnumUtil.GetCommandLineName((DlcEnum)int.Parse(UID));
 
             // else it's a normal mod and we need to clean the name
-            // Regular expression pattern for invalid characters
-            string pattern = @"[.()!:/]+";
+            // Regular expression pattern for invalid characters - no longer in use
+            //string pattern = @"[.()!:/]+";
+
+            //Check for allowed characters
+            string pattern = @"[^a-zA-Z0-9' +\-@_()\[\]]+";
+
 
             // Replace invalid characters with an empty string
             return $"@{Regex.Replace(Name, pattern, string.Empty)}";
