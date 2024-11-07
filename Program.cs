@@ -32,6 +32,11 @@ builder.Services.AddHttpClient<IScarletPigsApi, ScarletPigsApi>(client =>
 {
     client.BaseAddress = new Uri(apiurl ?? "");
 });
+builder.Services.AddHttpClient<ISteamworksApi, SteamworksApi>(client =>
+{
+    client.BaseAddress = new Uri("https://api.steampowered.com/");
+});
+
 
 // Configure authentication with Keycloak for a public client.
 builder.Services.AddAuthentication(options =>

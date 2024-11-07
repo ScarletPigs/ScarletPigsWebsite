@@ -8,6 +8,7 @@
         public string Author { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
-        public List<Mod> Mods { get; set; }
+        public HashSet<Mod> Dlcs { get; set; }
+        public HashSet<Mod> Mods { get; set; }
     }
 }
