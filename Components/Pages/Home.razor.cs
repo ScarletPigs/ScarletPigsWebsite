@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using ScarletPigsWebsite.Data.Models.Auth;
 using ScarletPigsWebsite.Data.Models.Events;
 using ScarletPigsWebsite.Data.Services.HTTP;
 using System.Net.Http.Headers;
@@ -21,7 +22,7 @@ namespace ScarletPigsWebsite.Components.Pages
         [Inject]
         public IScarletPigsApi ScarletPigsApi { get; set; } = default!;
 
-        ClaimsPrincipal? User { get; set; }
+        KeycloakUser? User { get; set; }
 
         string Token { get; set; } = "";
 
@@ -30,8 +31,16 @@ namespace ScarletPigsWebsite.Components.Pages
         protected override async Task OnInitializedAsync()
         {
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-            User = authState.User;
+            User = (KeycloakUser?)authState.User;
 
+            if (User.Identity.IsAuthenticated)
+            {
+                var accessToken = await HttpContextAccessor.HttpContext
+                    .GetTokenAsync("access_token");
+                accessToken = accessToken ?? "";
+            }
+
+            /*
             try
             {
                 var accessToken = await HttpContextAccessor.HttpContext.GetTokenAsync("access_token");
@@ -55,7 +64,7 @@ namespace ScarletPigsWebsite.Components.Pages
             {
                 Console.WriteLine(e.Message);
             }
-
+            */
 
 
 

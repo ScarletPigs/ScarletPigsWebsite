@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.HttpOverrides;
 using MudBlazor.Services;
 using ScarletPigsWebsite.Components;
 using ScarletPigsWebsite.Data.Services.HTTP;
+using ScarletPigsWebsite.Data.Services.Auth;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,7 @@ builder.Services.AddMudServices();
 
 // Add authorization services.
 builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AuthenticationStateProvider, KeycloakAuthenticationStateProvider>();
 
 // Add HttpContextAccessor for accessing HttpContext in components.
 builder.Services.AddHttpContextAccessor();
@@ -51,11 +54,12 @@ builder.Services.AddAuthentication(options =>
     options.Scope.Add("openid");
     options.Scope.Add("profile");
     options.Scope.Add("email");
+    options.Scope.Add("roles");
     // Add any additional scopes you need.
 
     // Configure TokenValidationParameters if necessary.
-    options.TokenValidationParameters.NameClaimType = "preferred_username";
-    options.TokenValidationParameters.RoleClaimType = "roles";
+    options.TokenValidationParameters.NameClaimType = "global_name";
+    options.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
 
     // Handle events (optional).
     options.Events = new OpenIdConnectEvents
@@ -78,6 +82,7 @@ builder.Services.AddAuthentication(options =>
         }
     };
 });
+
 
 var app = builder.Build();
 
