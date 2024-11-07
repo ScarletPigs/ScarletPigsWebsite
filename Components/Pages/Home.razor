@@ -10,69 +10,6 @@
 <MudContainer>
     <MudText Typo="Typo.h3" GutterBottom="true" Class="mt-2 align-self-center">Scarletpigs event schedule</MudText>
 
-    @if (User.Identity.IsAuthenticated)
-    {
-        <MudText Typo="Typo.h5" GutterBottom="true" Class="mt-2 align-self-center">Welcome @User.GlobalName</MudText>
-        <MudText Typo="Typo.h5" GutterBottom="true" Class="mt-2 align-self-center">An admin: @User.IsAdmin</MudText>
-        @foreach (var role in User.Roles)
-        {
-            <MudText Typo="Typo.h5" GutterBottom="true" Class="mt-2 align-self-center">Role: @role</MudText>
-        }
-    }
-
-
-
-    <AuthorizeView Roles="ArmaActive">
-        <Authorized>
-            Test1
-        </Authorized>
-    </AuthorizeView>
-    <AuthorizeView Roles="/ArmaActive">
-        <Authorized>
-            Test2
-        </Authorized>
-    </AuthorizeView>
-    <AuthorizeView Roles=" /ArmaActive">
-        <Authorized>
-            Test3
-        </Authorized>
-    </AuthorizeView>
-
-
-    <AuthorizeView Roles="ArmaActive">
-        <Authorized>
-            <MudText>
-                User: @(User.Identity.Name)
-            </MudText>
-            <MudAvatar  >
-                <MudImage Alt="Avatar" Src="@(User.AvatarUrl)" />
-            </MudAvatar>
-        </Authorized>
-        <NotAuthorized>
-            <MudText>
-                Not logged in
-            </MudText>
-        </NotAuthorized>
-    </AuthorizeView>
-
-    <AuthorizeView Roles="/UnitOrganiser">
-        <Authorized>
-            <MudText>
-                Oh my! You're an organiser!
-            </MudText>
-        </Authorized>
-        <NotAuthorized>
-            <MudText>
-                Not an admin!
-            </MudText>
-        </NotAuthorized>
-    </AuthorizeView>
-    
-
-    <MudButton Href="signin">Signin</MudButton>
-
-    <MudButton Href="signout">Signout</MudButton>
-
 
     <MudCalendar Items="Events" MonthCellMinHeight="100" ShowDay="false">
         <CellTemplate>

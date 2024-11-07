@@ -21,6 +21,7 @@ builder.Services.AddMudServices();
 // Add authorization services.
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, KeycloakAuthenticationStateProvider>();
+builder.Services.AddScoped<IClaimsTransformation, KeycloakClaimsTransformation>();
 
 // Add HttpContextAccessor for accessing HttpContext in components.
 builder.Services.AddHttpContextAccessor();
@@ -59,7 +60,9 @@ builder.Services.AddAuthentication(options =>
 
     // Configure TokenValidationParameters if necessary.
     options.TokenValidationParameters.NameClaimType = "global_name";
-    options.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
+    options.TokenValidationParameters.RoleClaimType = "roles";
+
+    options.ClaimActions.MapJsonKey(ClaimTypes.Role, "roles");
 
     // Handle events (optional).
     options.Events = new OpenIdConnectEvents
@@ -81,6 +84,14 @@ builder.Services.AddAuthentication(options =>
             return Task.CompletedTask;
         }
     };
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("IsAuthenticated", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+    });
 });
 
 
