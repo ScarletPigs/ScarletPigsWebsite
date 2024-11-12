@@ -41,8 +41,12 @@ namespace ScarletPigsWebsite.Data.Models.Events
         public DateTime EndTime { get; set; }
         public ModList Modset { get; set; }
 
+        public string ApiId { get; set; }
+
         public CalendarEvent(Event apievent)
         {
+            ApiId = apievent.Id;
+
             Name = apievent.Name;
             Description = apievent.Description;
             EventType = apievent.EventType;

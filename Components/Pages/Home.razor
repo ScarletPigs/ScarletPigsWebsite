@@ -7,11 +7,11 @@
     <MudImage Src="imgs/banner/image-047.jpg" Style="width:100vw;position:relative;bottom:55px;filter:blur(2px)" />
 </MudContainer>
 
-<MudContainer>
+<MudContainer Class="py-5">
     <MudText Typo="Typo.h3" GutterBottom="true" Class="mt-2 align-self-center">Scarletpigs event schedule</MudText>
 
-
-    <MudCalendar Items="Events" MonthCellMinHeight="100" ShowDay="false">
+    <ScarletPigsCalendar />
+    @* <MudCalendar Items="Events" MonthCellMinHeight="100" ShowDay="false" >
         <CellTemplate>
             <div style="width: 100%; height: 100%; border: 2px solid rgb(116, 23, 27);">
                 <div style="background-color: rgb(116, 23, 27);">
@@ -22,7 +22,7 @@
                 </div>
             </div>
         </CellTemplate>
-    </MudCalendar>
+    </MudCalendar> *@
 </MudContainer>
 
 @* <MudContainer>

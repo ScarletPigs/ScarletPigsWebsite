@@ -30,15 +30,15 @@ namespace ScarletPigsWebsite.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-            User = (KeycloakUser?)authState.User;
+            //var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            //User = (KeycloakUser?)authState.User;
 
-            if (User.Identity.IsAuthenticated)
-            {
-                var accessToken = await HttpContextAccessor.HttpContext
-                    .GetTokenAsync("access_token");
-                accessToken = accessToken ?? "";
-            }
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    var accessToken = await HttpContextAccessor.HttpContext
+            //        .GetTokenAsync("access_token");
+            //    accessToken = accessToken ?? "";
+            //}
 
             /*
             try
@@ -68,7 +68,7 @@ namespace ScarletPigsWebsite.Components.Pages
 
 
 
-            Events = (await ScarletPigsApi.GetEventsAsync()).Select(e => e.ToCalendarEvent()).ToList();
+            //Events = (await ScarletPigsApi.GetEventsAsync()).Select(e => e.ToCalendarEvent()).ToList();
         }
     }
 }
