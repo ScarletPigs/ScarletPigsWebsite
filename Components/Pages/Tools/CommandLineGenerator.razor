@@ -83,7 +83,7 @@
             <MudItem xs="12" Style="margin-top: 5px;">
                 <MudTextField @bind-Value="@commandLine"
                               ReadOnly="true"
-                              Label="Command Line"
+                                  Label="@($"Command Line{modPackSize}")"
                               Style="width: 100%;" />
             </MudItem>
             <MudItem xs="12" Style="margin-top: 10px; display: flex; justify-content: center;">
@@ -102,6 +102,7 @@
     private const string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
     private string _dragClass = DefaultDragClass;
     private string commandLine = string.Empty;
+    private string modPackSize = string.Empty;
     private MudFileUpload<IReadOnlyList<IBrowserFile>>? _fileUpload;
 
     private ModList? currentModlist { get; set; }
@@ -123,6 +124,10 @@
     {
         try
         {
+            // Clear the command line
+            commandLine = string.Empty;
+            StateHasChanged();
+
             var files = e.GetMultipleFiles();
             if(!ValidateInput(files, out string error))
             {
@@ -199,6 +204,10 @@
     {
         try
         {
+            // Clear the command line
+            commandLine = string.Empty;
+            StateHasChanged();
+
             List<string> modIds = GetModIdsFromString(customIdText);
 
             if (modIds.Count == 0)
@@ -245,6 +254,12 @@
         commandLine = newModlist.GetCommandLine();
         selectedDlcs = newModlist.Dlcs;
 
+        long totalSize = newModlist.GetTotalSizeInBytes();
+        if (totalSize > 0)
+            modPackSize = $" ({FileSizeFormatterUtil.ReadableSizeFromBytes(totalSize)})";
+        else
+            modPackSize = string.Empty;
+
         Snackbar.Add("Command line created!", Severity.Success);
 
         // Ensure the UI updates
@@ -272,6 +287,9 @@
         bool dlcChanged = currentModlist.UpdateDlcs(selectedDlcs.ToHashSet());
         if(dlcChanged)
             commandLine = currentModlist.GetCommandLine();
+
+        // Ensure the UI updates
+        StateHasChanged();
     }
 
     Func<Mod, string> converter = m => m?.Name;

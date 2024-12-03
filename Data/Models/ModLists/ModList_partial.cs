@@ -46,10 +46,15 @@ namespace ScarletPigsWebsite.Data.Models.ModLists
                     if (file.CreatorAppId != Constants.Arma3AppId)
                         continue;
 
+                    //get the filesize in kb
+                    long fileSize = 0;
+                    long.TryParse(file.FileSize, out fileSize);
+
                     Mod mod = new Mod()
                     {
                         Name = file.Title,
-                        UID = file.PublishedFileId.ToString()
+                        UID = file.PublishedFileId.ToString(),
+                        SizeInBytes = fileSize
                     };
                     modList.AddMod(mod);
                 }
@@ -112,6 +117,10 @@ namespace ScarletPigsWebsite.Data.Models.ModLists
             return dlcs;
         }
 
+        public long GetTotalSizeInBytes()
+        {
+            return Mods.Sum(mod => mod.SizeInBytes) + Dlcs.Sum(mod => mod.SizeInBytes);
+        }
 
         public bool UpdateDlcs(HashSet<Mod> dlcs)
         {
