@@ -10,6 +10,8 @@ namespace ScarletPigsWebsite.Data.Models.ModLists
 
         public string UID { get; set; }
 
+        public long SizeInBytes { get; set; }
+
         private string _name;
         public string Name
         {
