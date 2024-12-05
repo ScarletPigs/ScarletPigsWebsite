@@ -15,6 +15,8 @@ namespace ScarletPigsWebsite.Data.Models.Events
         public EventType EventType { get; set; }
         [JsonIgnore]
         public string Author { get; set; }
+        [JsonPropertyName("creatorDiscordUsername")]
+        public string AuthorId { get; set; }
         public DateTime CreatedAt { get; set; }
         [JsonPropertyName("lastModified")]
         public DateTime LastUpdatedAt { get; set; }

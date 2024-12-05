@@ -23,7 +23,12 @@ else
             <MudText Typo="Typo.body2" GutterBottom="true">From: @Event.StartTime.ToShortTimeString() - @Event.StartTime.ToShortDateString()</MudText>
             <MudText Typo="Typo.body2" GutterBottom="true">To: @Event.EndTime.ToShortTimeString() - @Event.StartTime.ToShortDateString()</MudText>
         }
-        <MudButton Color="Color.Primary">Edit</MudButton>
+        
+        @if (User.Id == Event.AuthorId)
+        {
+            <MudButton Color="Color.Primary">Edit</MudButton>
+        }
+
     </MudContainer>
 }
 

@@ -30,8 +30,10 @@ namespace ScarletPigsWebsite.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            //var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-            //User = (KeycloakUser?)authState.User;
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            User = (KeycloakUser?)authState.User;
+
+            User.Claims.ToList().ForEach(c => Console.WriteLine($"{c.Type}: {c.Value}"));
 
             //if (User.Identity.IsAuthenticated)
             //{
