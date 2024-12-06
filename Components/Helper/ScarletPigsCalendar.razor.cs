@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
+using MudBlazor.Extensions;
 using ScarletPigsWebsite.Data.Models.Events;
 using ScarletPigsWebsite.Data.Services.HTTP;
 
@@ -61,6 +62,22 @@ namespace ScarletPigsWebsite.Components.Helper
             }
 
 
+            return Task.CompletedTask;
+        }
+
+        public Task AddNewEvent()
+        {
+            // Set from time to the selected date at 15 o'clock
+            DateTime fromTime = SelectedDate.Date.AddHours(15);
+            DateTime toTime = SelectedDate.Date.AddHours(18);
+
+            string uriTarget = NavigationManager.GetUriWithQueryParameters($"/events/create", new Dictionary<string, object?>
+            {
+                { "fromTime", fromTime },
+                { "toTime", toTime }
+            });
+
+            NavigationManager.NavigateTo(uriTarget);
             return Task.CompletedTask;
         }
 
