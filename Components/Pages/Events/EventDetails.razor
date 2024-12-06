@@ -24,9 +24,12 @@ else
             <MudText Typo="Typo.body2" GutterBottom="true">To: @Event.EndTime.ToShortTimeString() - @Event.StartTime.ToShortDateString()</MudText>
         }
         
-        @if (User.Id == Event.AuthorId)
+        @if (User.Id == Event.CreatorDiscordUsername)
         {
-            <MudButton Color="Color.Primary">Edit</MudButton>
+            <MudContainer Class="flex-row">
+                <MudButton Color="Color.Primary" StartIcon="@Icons.Material.Filled.Edit" OnClick="@EditEvent" >Edit</MudButton>
+                <MudButton Color="Color.Error" StartIcon="@Icons.Material.Filled.Close" OnClick="@DeleteEvent" >Delete</MudButton>
+            </MudContainer>
         }
 
     </MudContainer>

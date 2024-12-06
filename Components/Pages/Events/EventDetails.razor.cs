@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using ScarletPigsWebsite.Data.Models.Auth;
-using ScarletPigsWebsite.Data.Models.Events;
+using Piglet_Domain_Models.Models;
 using ScarletPigsWebsite.Data.Services.HTTP;
 
 namespace ScarletPigsWebsite.Components.Pages.Events
@@ -38,6 +38,23 @@ namespace ScarletPigsWebsite.Components.Pages.Events
 
 
             base.OnInitialized();
+        }
+
+        public async Task DeleteEvent()
+        {
+            if (Event == null)
+                return;
+
+            await Api.DeleteEventAsync(Event.Id.ToString());
+            NavigationManager.NavigateTo("/");
+        }
+
+        public async Task EditEvent()
+        {
+            if (Event == null)
+                return;
+
+            NavigationManager.NavigateTo($"/events/edit/{Event.Id}");
         }
     }
 }
