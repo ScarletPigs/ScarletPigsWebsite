@@ -4,7 +4,7 @@
 <MudContainer>
     <MudText Typo="Typo.h3" GutterBottom="true">Edit event</MudText>
 
-    <EditForm Model="@CreateEventDTO" OnValidSubmit="@UpdateEvent">
+    <EditForm Model="@CreateEventDTO" OnValidSubmit="@OnCreateEvent">
         <DataAnnotationsValidator />
         <MudContainer>
             <MudTextField Label="OP Name" @bind-Value="CreateEventDTO.Name" />

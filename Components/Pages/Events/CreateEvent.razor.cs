@@ -46,7 +46,7 @@ namespace ScarletPigsWebsite.Components.Pages.Events
                 {
                     Name = "",
                     Description = "",
-                    Author = "",
+                    Author = User.UserName,
                     CreatorDiscordUsername = User.Id,
                     StartTime = fromTime ?? DateTime.UtcNow,
                     EndTime = toTime ?? DateTime.UtcNow
@@ -59,13 +59,18 @@ namespace ScarletPigsWebsite.Components.Pages.Events
             return base.OnInitializedAsync();
         }
 
-        public async Task UpdateEvent()
+        public async Task OnCreateEvent()
         {
 
             if (await Api.CreateEventAsync(CreateEventDTO) != null)
                 success = 1;
             else
                 success = 2;
+
+
+
+            if (success == 1)
+                NavigationManager.NavigateTo($"/");
         }
 
 
