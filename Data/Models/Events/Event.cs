@@ -1,31 +1,13 @@
 ﻿using Heron.MudCalendar;
-using ScarletPigsWebsite.Data.Models.JSON;
 using ScarletPigsWebsite.Data.Models.ModLists;
-using System.Text.Json.Serialization;
 
 namespace ScarletPigsWebsite.Data.Models.Events
 {
-    public class Event
+    public static class EventExtensions
     {
-        [JsonConverter(typeof(AutoNumberToStringConverter))]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string Name { get; set; }
-        public string Description { get; set; }
-        [JsonIgnore]
-        public EventType EventType { get; set; }
-        [JsonIgnore]
-        public string Author { get; set; }
-        public DateTime CreatedAt { get; set; }
-        [JsonPropertyName("lastModified")]
-        public DateTime LastUpdatedAt { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        [JsonIgnore]
-        public ModList Modset { get; set; }
-
-        public CalendarEvent ToCalendarEvent()
+        public static CalendarEvent ToCalendarEvent(this Piglet_Domain_Models.Models.Event apievent)
         {
-            return new CalendarEvent(this);
+            return new CalendarEvent(apievent);
         }
     }
 
@@ -41,17 +23,19 @@ namespace ScarletPigsWebsite.Data.Models.Events
         public DateTime EndTime { get; set; }
         public ModList Modset { get; set; }
 
-        public CalendarEvent(Event apievent)
+        public string ApiId { get; set; }
+
+        public CalendarEvent(Piglet_Domain_Models.Models.Event apievent)
         {
+            ApiId = apievent.Id.ToString();
+
             Name = apievent.Name;
             Description = apievent.Description;
-            EventType = apievent.EventType;
             Author = apievent.Author;
             CreatedAt = apievent.CreatedAt;
-            LastUpdatedAt = apievent.LastUpdatedAt;
+            LastUpdatedAt = apievent.LastModified;
             StartTime = apievent.StartTime;
             EndTime = apievent.EndTime;
-            Modset = apievent.Modset;
 
             if (Modset == null)
             {
