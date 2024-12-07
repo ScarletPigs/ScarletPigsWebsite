@@ -1,10 +1,15 @@
-﻿using ScarletPigsWebsite.Data.Models.Events;
+﻿using Piglet_Domain_Models.DTOs.Event;
+using Piglet_Domain_Models.Models;
 
 namespace ScarletPigsWebsite.Data.Services.HTTP
 {
     public interface IScarletPigsApi
     {
+        public Task<Event?> GetEventAsync(string id);
         public Task<List<Event>> GetEventsAsync();
+        public Task<Event?> CreateEventAsync(CreateEventDTO newEvent);
+        public Task<bool> UpdateEventAsync(string id, EditEventDTO updatedEvent);
+        public Task DeleteEventAsync(string id);
     }
 
     public class ScarletPigsApi : IScarletPigsApi
@@ -16,9 +21,30 @@ namespace ScarletPigsWebsite.Data.Services.HTTP
             _httpClient = httpClient;
         }
 
+        public async Task<Event?> GetEventAsync(string id)
+        {
+            return (await _httpClient.GetFromJsonAsync<Event>($"events/{id}"));
+        }
+
         public async Task<List<Event>> GetEventsAsync()
         {
             return (await _httpClient.GetFromJsonAsync<List<Event>>("events/")) ?? new List<Event>();
+        }
+
+
+        public async Task<Event?> CreateEventAsync(CreateEventDTO newEvent)
+        {
+            return await (await _httpClient.PostAsJsonAsync<CreateEventDTO>("events/", newEvent)).Content.ReadFromJsonAsync<Event>();
+        }
+
+        public async Task<bool> UpdateEventAsync(string id, EditEventDTO updatedEvent)
+        {
+            return (await _httpClient.PutAsJsonAsync<EditEventDTO>($"events/{id}", updatedEvent)).IsSuccessStatusCode;
+        }
+
+        public async Task DeleteEventAsync(string id)
+        {
+            await _httpClient.DeleteAsync($"events/{id}");
         }
     }
 }
