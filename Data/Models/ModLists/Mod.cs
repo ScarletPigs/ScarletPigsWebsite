@@ -8,6 +8,7 @@ namespace ScarletPigsWebsite.Data.Models.ModLists
     public class Mod
     {
 
+        //steam workshop id
         public string UID { get; set; }
 
         public long SizeInBytes { get; set; }
@@ -41,16 +42,37 @@ namespace ScarletPigsWebsite.Data.Models.ModLists
             if (IsDlc())
                 return EnumUtil.GetCommandLineName((DlcEnum)int.Parse(UID));
 
-            // else it's a normal mod and we need to clean the name
-            // Regular expression pattern for invalid characters - no longer in use
-            //string pattern = @"[.()!:/]+";
+            //Else it's a normal mod and we need to clean the name
+
+            //Apply special cases for the command line name
+            //returns false if only special case pattern should be applied.
+            if (!ApplySpecialCasesForCommandLineNames())
+                return Name;
+
 
             //Check for allowed characters
             string pattern = @"[^a-zA-Z0-9' +\-@_()\[\]]+";
 
-
             // Replace invalid characters with an empty string
             return $"@{Regex.Replace(Name, pattern, string.Empty)}";
+        }
+
+        //apply special cases for the command line name.
+        //returns true the base pattern should be applied, false if only special case pattern should be applied
+        private bool ApplySpecialCasesForCommandLineNames()
+        {
+            string pattern = string.Empty;
+            switch (UID)
+            {
+                //Task Force Arrowhead Radio (BETA!!!)
+                case "894678801":
+                    //Remove ()
+                    pattern = @"[()]+";
+                    Name = Regex.Replace(Name, pattern, string.Empty);
+                    return true;
+            }
+
+            return true;
         }
 
         public override bool Equals(object o)
